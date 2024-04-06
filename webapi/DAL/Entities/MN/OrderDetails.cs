@@ -9,12 +9,15 @@ namespace webapi.DAL.Entities.MN
         [ForeignKey("Order")]
         [Column("order_id")]
         public int OrderId { get; set; }
-        [ForeignKey("Product")]
-        [Column("product_id")]
-        public int ProductId { get; set; }
+
+        [ForeignKey("User")]
+        [Column("user_email")]
+        public string UserEmail { get; set; }
+
         [Column("quantity")]
         public int Quantity { get; set; }
         [Column("price")]
+
         public Order Order { get; set; }
         public Product Product { get; set; }
     }

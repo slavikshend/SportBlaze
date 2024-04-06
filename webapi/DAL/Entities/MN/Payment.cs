@@ -6,9 +6,9 @@ namespace webapi.DAL.Entities.MN
     [Table("payments")]
     public class Payment : Entity
     {
-        [Column("user_id")]
         [ForeignKey("User")]
-        public int UserId { get; set; }
+        [Column("user_email")]
+        public string UserEmail { get; set; }
 
         [Column("order_id")]
         [ForeignKey("Order")]

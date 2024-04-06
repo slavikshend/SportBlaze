@@ -6,10 +6,12 @@ namespace webapi.DAL.Entities.MN
     [Table("feedbacks")]
     public class FeedBack : Entity
     {
-        [Column("user_id")]
-        public int UserId { get; set; }
+        [ForeignKey("User")]
+        [Column("user_email")]
+        public string UserEmail { get; set; }
 
         [Column("product_id")]
+        [ForeignKey("Product")]
         public int ProductId { get; set; }
 
         [Column("rating")]
@@ -19,7 +21,7 @@ namespace webapi.DAL.Entities.MN
         public string Comment { get; set; }
 
         [Column("date")]
-        DateTimeOffset Date { get; set; }
+        public DateTimeOffset Date { get; set; }
         public User User { get; set; }
         public Product Product { get; set; }
     }

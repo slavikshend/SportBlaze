@@ -8,10 +8,9 @@ namespace webapi.DAL.Entities.Main
     [Table("orders")]
     public class Order : Entity
     {
-        [Column("user_id")]
         [ForeignKey("User")]
-        [Required]
-        public int UserId { get; set; }
+        [Column("user_email")]
+        public string UserEmail { get; set; }
 
         [Column("order_date")]
         [Required]

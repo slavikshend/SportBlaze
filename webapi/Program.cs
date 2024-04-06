@@ -14,7 +14,7 @@ internal class Program
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-       /* builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+       builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -27,7 +27,7 @@ internal class Program
             ValidAudience = builder.Configuration["Jwt:Issuer"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
-    });*/
+    });
         builder.Services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new() { Title = "webapi", Version = "v1" });
@@ -47,8 +47,8 @@ internal class Program
         app.UseAuthorization();
 
         app.MapControllers();
-        //app.UseAuthentication(); 
-        //app.UseAuthorization(); 
+        app.UseAuthentication(); 
+        app.UseAuthorization(); 
 
         app.Run();
     }

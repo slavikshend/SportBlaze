@@ -7,8 +7,8 @@ namespace webapi.DAL.Entities.MN
     public class Favourites : Entity
     {
         [ForeignKey("User")]
-        [Column("user_id")]
-        public int UserId { get; set; }
+        [Column("user_email")]
+        public string UserEmail { get; set; }
 
         [ForeignKey("Product")]
         [Column("product_id")]

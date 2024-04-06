@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using webapi.DAL.Context;
@@ -11,9 +12,11 @@ using webapi.DAL.Context;
 namespace webapi.Migrations
 {
     [DbContext(typeof(SportsShopDbContext))]
-    partial class SportsShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240405200124_AddedRoles")]
+    partial class AddedRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,16 +38,15 @@ namespace webapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("product_id");
 
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("user_email");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("UserEmail");
+                    b.HasIndex("UserId");
 
                     b.ToTable("favourites");
                 });
@@ -63,10 +65,6 @@ namespace webapi.Migrations
                         .HasColumnType("text")
                         .HasColumnName("comment");
 
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("date");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("integer")
                         .HasColumnName("product_id");
@@ -75,16 +73,15 @@ namespace webapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("rating");
 
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("user_email");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("UserEmail");
+                    b.HasIndex("UserId");
 
                     b.ToTable("feedbacks");
                 });
@@ -103,16 +100,12 @@ namespace webapi.Migrations
                         .HasColumnName("order_id");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("product_id");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer")
                         .HasColumnName("quantity");
-
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("user_email");
 
                     b.HasKey("Id");
 
@@ -144,16 +137,15 @@ namespace webapi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("payment_date");
 
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("user_email");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("UserEmail");
+                    b.HasIndex("UserId");
 
                     b.ToTable("payments");
                 });
@@ -171,16 +163,15 @@ namespace webapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("role_id");
 
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("user_email");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("UserEmail");
+                    b.HasIndex("UserId");
 
                     b.ToTable("role_assignment");
                 });
@@ -295,10 +286,9 @@ namespace webapi.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("total");
 
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("user_email");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id");
 
@@ -308,7 +298,7 @@ namespace webapi.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.HasIndex("UserEmail");
+                    b.HasIndex("UserId");
 
                     b.ToTable("orders");
                 });
@@ -403,9 +393,12 @@ namespace webapi.Migrations
 
             modelBuilder.Entity("webapi.DAL.Entities.Main.User", b =>
                 {
-                    b.Property<string>("Email")
-                        .HasColumnType("text")
-                        .HasColumnName("email");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("text")
@@ -414,6 +407,10 @@ namespace webapi.Migrations
                     b.Property<string>("City")
                         .HasColumnType("text")
                         .HasColumnName("password");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text")
+                        .HasColumnName("email");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("text")
@@ -431,7 +428,7 @@ namespace webapi.Migrations
                         .HasColumnType("text")
                         .HasColumnName("phone");
 
-                    b.HasKey("Email");
+                    b.HasKey("Id");
 
                     b.ToTable("users");
                 });
@@ -625,7 +622,7 @@ namespace webapi.Migrations
 
                     b.HasOne("webapi.DAL.Entities.Main.User", "User")
                         .WithMany("Favourites")
-                        .HasForeignKey("UserEmail")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -644,7 +641,7 @@ namespace webapi.Migrations
 
                     b.HasOne("webapi.DAL.Entities.Main.User", "User")
                         .WithMany("FeedBacks")
-                        .HasForeignKey("UserEmail")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -682,7 +679,7 @@ namespace webapi.Migrations
 
                     b.HasOne("webapi.DAL.Entities.Main.User", "User")
                         .WithMany("Payments")
-                        .HasForeignKey("UserEmail")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -701,7 +698,7 @@ namespace webapi.Migrations
 
                     b.HasOne("webapi.DAL.Entities.Main.User", "User")
                         .WithMany("RoleAssignments")
-                        .HasForeignKey("UserEmail")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -732,7 +729,7 @@ namespace webapi.Migrations
 
                     b.HasOne("webapi.DAL.Entities.Main.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserEmail")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
