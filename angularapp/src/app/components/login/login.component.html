@@ -1,0 +1,31 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title style="margin: 0 auto;">Вхід</h2>
+  <button mat-dialog-close class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div class="container" style="padding-bottom:0; margin-bottom:0;">
+  <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Адреса електронної пошти" formControlName="email">
+      <mat-error *ngIf="loginForm.controls['email'].errors?.['required']">Поле не має бути порожнім</mat-error>
+      <mat-error *ngIf="loginForm.controls['email'].errors?.['email']">Невалідна адреса електронної пошти</mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Пароль" formControlName="password" type="{{ passwordHidden ? 'password' : 'text' }}" id="passwordInput">
+      <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility($event)" tabindex="-1">
+        <mat-icon>{{ passwordHidden ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="loginForm.controls['password'].errors?.['required']">Поле не має бути порожнім</mat-error>
+    </mat-form-field>
+    <div class="error-message">{{ errorMessage }}</div>
+    <div class="button-div">
+      <button mat-button [disabled]="loginForm.invalid">Увійти</button>
+    </div>
+  </form>
+</div>
+<mat-dialog-actions style="padding-top:0; margin-top:0;" class="dialog-actions">
+  <div style="margin: 0;">Немає акаунту?</div>
+  <button mat-button (click)="openRegistrationDialog()">Реєстрація</button>
+</mat-dialog-actions>
+

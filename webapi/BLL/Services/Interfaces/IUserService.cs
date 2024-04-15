@@ -1,12 +1,12 @@
-﻿using webapi.BLL.Models;
+﻿using System.Threading.Tasks;
+using webapi.BLL.Models;
 
 namespace webapi.BLL.Services.Interfaces
 {
     public interface IUserService
     {
-        public Task<LoginModel> LoginAsync(LoginModel loginModel);
-        public Task<RegisterModel> RegisterAsync(RegisterModel registerModel);
-
-        public Task<UserModel> UpdateUserAsync(int id);
+        Task<string> LoginAsync(LoginModel loginModel);
+        Task<bool> RegisterAsync(RegisterModel registerModel);
+        Task<bool> UpdateUserAsync(UserModel userModel, string email);
     }
 }

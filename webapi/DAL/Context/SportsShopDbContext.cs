@@ -28,6 +28,7 @@ namespace webapi.DAL.Context
         public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,18 +58,36 @@ namespace webapi.DAL.Context
                 new DeliveryMethod { Id = 2, Name = "Укрпошта" },
                 new DeliveryMethod { Id = 3, Name = "Justin" }
             );
+            modelBuilder.Entity<Role>().HasData(
+                new Role { Id = 1, Name = "Admin" },
+                new Role { Id = 2, Name = "RegisteredUser" },
+                new Role { Id = 3, Name = "UnregisteredUser" }
+
+    );
+            modelBuilder.Entity<User>().HasData(
+        new User
+        {
+            Email = "admin@example.com",
+            FirstName = "Admin",
+            LastName = "User",
+            HashedPassword = "ed647ee632f13df6c65f9e47929f13cfc35069bbaa70e50c157bac04575c4e37",
+            RoleId = 1,
+            Salt = "yuz1xllqhl7jcudb"
+        }
+    );
         }
 
-        public override int SaveChanges()
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             LogChanges();
-            return base.SaveChanges();
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
         private void LogChanges()
         {
             var entries = ChangeTracker.Entries()
-                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted);
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted)
+                .ToList();
 
             foreach (var entry in entries)
             {
@@ -80,12 +99,27 @@ namespace webapi.DAL.Context
 
                 var operation = entry.State.ToString().ToLower();
                 var entityType = entry.Entity.GetType().Name.ToLower();
-                var entityId = entry.Property("Id").CurrentValue;
+                object entityId = null;
 
-                log.LogMessage = $"The {entityType} with id {entityId} has been {operation}";
+                if (entityType == "user")
+                {
+                    var emailProperty = entry.Property("Email");
+                    if (emailProperty != null)
+                    {
+                        entityId = emailProperty.CurrentValue;
+                    }
+                }
+                else
+                {
+                    entityId = entry.Property("Id").CurrentValue;
+                }
+
+                log.LogMessage = $"The {entityType} with {(entityType == "user" ? "email" : "id")} {entityId} has been {operation}";
 
                 LogLines.Add(log);
             }
         }
+
+
     }
 }

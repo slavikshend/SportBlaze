@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using webapi.DAL.Entities.MN;
+using webapi.DAL.Entities.Main;
 
 namespace webapi.DAL.Entities.Support
 {
@@ -8,6 +8,6 @@ namespace webapi.DAL.Entities.Support
     {
         [Column("name")]
         public string Name { get; set; }
-        public ICollection<RoleAssignment> RoleAssignments { get; set; }
+        public ICollection<User> Users;
     }
 }

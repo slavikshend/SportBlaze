@@ -1,27 +1,37 @@
-﻿using webapi.BLL.Repos.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using webapi.BLL.Repos.Interfaces;
 using webapi.DAL.Context;
 using webapi.DAL.Entities.Main;
 
 namespace webapi.BLL.Repos.Implementations
 {
-    public class UserRepo //: IUserRepo
+    public class UserRepo : IUserRepo
     {
-        private readonly SportsShopDbContext context;
-        public UserRepo(SportsShopDbContext _context)
+        private readonly SportsShopDbContext _context;
+
+        public UserRepo(SportsShopDbContext context)
         {
-            context = _context;
+            _context = context;
         }
 
-        public void AddUser(User user)
+        public async Task<User> GetRegisteredUser(string email)
         {
-            context.Users.Add(user);
-            context.SaveChanges();
+            return await _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Email == email && u.Role.Name != "UnregisteredUser");
         }
 
-        public void DeleteUser(User user)
+        public async Task<User> UpdateUser(User user)
         {
-            context.Users.Remove(user);
-            context.SaveChanges();
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+        public async Task<User> AddUser(User user)
+        {
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
     }
 }

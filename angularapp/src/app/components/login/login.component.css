@@ -1,0 +1,84 @@
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+  .dialog-header h2 {
+    margin: 0;
+    color: white; 
+  }
+
+.close-button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  margin:0;
+}
+
+  .close-button:hover mat-icon {
+    color: lightgrey;
+    margin:0;
+  }
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+}
+
+  .close-button:hover mat-icon {
+    color: gray;
+  }
+
+.dialog-actions {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog-header h2 {
+  margin: 0;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-dialog-content{
+padding: 0;
+}
+
+.login-form {
+    padding:0;
+}
+.container{
+    padding:10px 35px 0 35px;
+    margin:0;
+}
+.button-div{
+    margin-top: 10px;
+    display:flex;
+justify-content: center;
+}
+
+input[type=password]::-ms-reveal,
+input[type=password]::-ms-clear {
+  display: none;
+}
+
+.error-message {
+  text-align: center;
+  margin-bottom: 10px;
+  color: red;
+}

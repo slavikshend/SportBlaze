@@ -6,9 +6,8 @@ namespace webapi.BLL.Repos.Interfaces
 {
     public interface IUserRepo
     {
-        public Task<User> GetUserById(int id);
-        public Task<User> GetUserByLoginAndPassword(LoginModel model);
+        public Task<User> GetRegisteredUser(string email);
         public Task<User> UpdateUser(User user);
-        public Task<User> AddUser(LoginModel model);
+        public Task<User> AddUser(User user);
     }
 }

@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using NuGet.Common;
 using System.Security.Claims;
-using System.Text;
+using System.Threading.Tasks;
 using webapi.BLL.Models;
-using webapi.BLL.Repos.Interfaces;
 using webapi.BLL.Services.Interfaces;
-using webapi.DAL.Context;
-using webapi.DAL.Entities.Main;
 
 namespace webapi.BLL.Controllers
 {
@@ -15,56 +13,63 @@ namespace webapi.BLL.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IUserService _service;
-        public AuthController(IConfiguration configuration, IUserService userService)
+
+        public AuthController(IUserService userService)
         {
-            _configuration = configuration;
             _service = userService;
         }
 
         [HttpPost("login")]
-        public IActionResult Login(LoginModel model)
+        public async Task<ActionResult<LoginResult>> Login(LoginModel model)
         {
-            // Validate user input  
-
-            var token = GenerateJwtToken(model.Email);
-
-            return Ok(new { token });
-        }
-
-        [HttpPost("signup")]
-        public IActionResult Register(RegisterModel model)
-        {
-            // Validate user input
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Create user in the database (you need to implement this logic)
-            // Return appropriate response based on the result
-            // For demo purpose, let's assume user creation is successful
-            return Ok("User created successfully");
+            var token = await _service.LoginAsync(model);
+            if (token == null)
+            {
+                return Unauthorized(new LoginResult { Successful = false, Error = "Invalid email or password" });
+            }
+            return Ok(new LoginResult { Successful = true, Token = token });
         }
 
-        private string GenerateJwtToken(string email)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterModel model)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
+            if (!ModelState.IsValid)
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, email)
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
+                return BadRequest(ModelState);
+            }
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var result = await _service.RegisterAsync(model);
+            if (!result)
+            {
+                return BadRequest(new { message = "User registration failed" });
+            }
+
+            return Ok(new { message = "User registered successfully" });
+        }
+
+        [Authorize(Roles = "RegisteredUser,Admin")]
+        [HttpPut("edituser")]
+        public async Task<IActionResult> EditUser(UserModel model)
+        {
+            var userEmail = User.FindFirstValue(ClaimTypes.Name);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _service.UpdateUserAsync(model, userEmail);
+            if (!result)
+            {
+                return NotFound("User not found");
+            }
+
+            return Ok("User information updated successfully");
         }
     }
 }

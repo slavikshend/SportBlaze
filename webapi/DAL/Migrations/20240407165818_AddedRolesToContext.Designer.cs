@@ -12,8 +12,8 @@ using webapi.DAL.Context;
 namespace webapi.Migrations
 {
     [DbContext(typeof(SportsShopDbContext))]
-    [Migration("20240406000655_SetEmailAsKey")]
-    partial class SetEmailAsKey
+    [Migration("20240407165818_AddedRolesToContext")]
+    partial class AddedRolesToContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -159,33 +159,6 @@ namespace webapi.Migrations
                     b.HasIndex("UserEmail");
 
                     b.ToTable("payments");
-                });
-
-            modelBuilder.Entity("webapi.DAL.Entities.MN.RoleAssignment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("role_id");
-
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("user_email");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserEmail");
-
-                    b.ToTable("role_assignment");
                 });
 
             modelBuilder.Entity("webapi.DAL.Entities.Main.Brand", b =>
@@ -416,7 +389,7 @@ namespace webapi.Migrations
 
                     b.Property<string>("City")
                         .HasColumnType("text")
-                        .HasColumnName("password");
+                        .HasColumnName("city");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("text")
@@ -434,9 +407,25 @@ namespace webapi.Migrations
                         .HasColumnType("text")
                         .HasColumnName("phone");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
+
                     b.HasKey("Email");
 
+                    b.HasIndex("RoleId");
+
                     b.ToTable("users");
+
+                    b.HasData(
+                        new
+                        {
+                            Email = "admin@example.com",
+                            FirstName = "Admin",
+                            HashedPassword = "c0080afeb2e67fc26ab6f796e7e8931e0b40f07e448f234ce88de80429932222",
+                            LastName = "User",
+                            RoleId = 1
+                        });
                 });
 
             modelBuilder.Entity("webapi.DAL.Entities.Support.DeliveryMethod", b =>
@@ -616,6 +605,23 @@ namespace webapi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "RegisteredUser"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "UnregisteredUser"
+                        });
                 });
 
             modelBuilder.Entity("webapi.DAL.Entities.MN.Favourites", b =>
@@ -694,25 +700,6 @@ namespace webapi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("webapi.DAL.Entities.MN.RoleAssignment", b =>
-                {
-                    b.HasOne("webapi.DAL.Entities.Support.Role", "Role")
-                        .WithMany("RoleAssignments")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("webapi.DAL.Entities.Main.User", "User")
-                        .WithMany("RoleAssignments")
-                        .HasForeignKey("UserEmail")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("webapi.DAL.Entities.Main.Order", b =>
                 {
                     b.HasOne("webapi.DAL.Entities.Support.DeliveryMethod", "DeliveryMethod")
@@ -778,6 +765,17 @@ namespace webapi.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("webapi.DAL.Entities.Main.User", b =>
+                {
+                    b.HasOne("webapi.DAL.Entities.Support.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("webapi.DAL.Entities.Support.Feature", b =>
                 {
                     b.HasOne("webapi.DAL.Entities.Main.Product", "Product")
@@ -819,13 +817,6 @@ namespace webapi.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("Payments");
-
-                    b.Navigation("RoleAssignments");
-                });
-
-            modelBuilder.Entity("webapi.DAL.Entities.Support.Role", b =>
-                {
-                    b.Navigation("RoleAssignments");
                 });
 #pragma warning restore 612, 618
         }

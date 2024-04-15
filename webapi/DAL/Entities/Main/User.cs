@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using webapi.DAL.Entities.MN;
+using webapi.DAL.Entities.Support;
 
 namespace webapi.DAL.Entities.Main
 {
@@ -21,11 +22,20 @@ namespace webapi.DAL.Entities.Main
         [Column("hashed_password")]
         public string? HashedPassword { get; set; }
 
+        [Column("salt")]
+        public string? Salt { get; set; }
+
         [Column("phone")]
         public string? Phone { get; set; }
 
-        [Column("password")]
+        [Column("city")]
         public string? City { get; set; }
+
+        [Column("role_id")]
+        [ForeignKey("Role")]
+        public int RoleId { get; set; }
+
+        public Role Role { get; set; }
 
         [Column("address")]
         public string? Address { get; set; }
@@ -33,6 +43,5 @@ namespace webapi.DAL.Entities.Main
         public ICollection<Order> Orders { get; set; }
         public ICollection<FeedBack> FeedBacks { get; set; }
         public ICollection<Payment> Payments { get; set; }
-        public ICollection<RoleAssignment> RoleAssignments { get; set; }
     }
 }

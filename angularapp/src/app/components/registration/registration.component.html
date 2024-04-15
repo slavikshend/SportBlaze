@@ -1,0 +1,41 @@
+<div class="dialog-header">
+  <button class="back-button" (click)="redirectToLogin()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+  </button>
+  <h2 mat-dialog-title style="margin: 0 auto;">Реєстрація</h2>
+  <button mat-dialog-close class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div class="container">
+  <form [formGroup]="registrationForm" (ngSubmit)="register()" class="registration-form">
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Адреса електронної пошти" formControlName="email">
+      <mat-error *ngIf="formControls['email'].errors?.['required']">Поле не має бути порожнім</mat-error>
+      <mat-error *ngIf="formControls['email'].errors?.['email']">Невалідна адреса електронної пошти</mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Пароль" id="passwordInput" formControlName="password" [type]="passwordHidden ? 'password' : 'text'">
+      <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()">
+        <mat-icon>{{ passwordHidden ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="formControls['password'].errors?.['required']">Поле не має бути порожнім</mat-error>
+      <mat-error *ngIf="formControls['password'].errors?.['minlength'] && !formControls['password'].errors?.['required']">Пароль має містити мінімум 8 знаків</mat-error>
+      <mat-error *ngIf="formControls['password'].errors?.['noUpperCase'] && !formControls['password'].errors?.['minlength'] && !formControls['password'].errors?.['required']">Пароль має містити мінімум одну велику літеру</mat-error>
+      <mat-error *ngIf="formControls['password'].errors?.['noNumber'] && !formControls['password'].errors?.['noUpperCase'] && !formControls['password'].errors?.['minlength'] && !formControls['password'].errors?.['required']">Пароль має містити принаймні одну цифру</mat-error>
+      <mat-error *ngIf="formControls['password'].errors?.['noSpecialChar'] && !formControls['password'].errors?.['noNumber'] && !formControls['password'].errors?.['noUpperCase'] && !formControls['password'].errors?.['minlength'] && !formControls['password'].errors?.['required']">Має містити мінімум один спеціальний символ</mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Підтвердження пароля" id="confirmPasswordInput" formControlName="confirmPassword" [type]="passwordHiddenConfirm ? 'password' : 'text'">
+      <button mat-icon-button matSuffix type="button" (click)="toggleConfirmPasswordVisibility()">
+        <mat-icon>{{ passwordHiddenConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="formControls['confirmPassword'].errors?.['required']">Поле не має бути порожнім</mat-error>
+      <mat-error *ngIf="formControls['confirmPassword'].errors?.['passwordMismatch']">Паролі не збігаються</mat-error>
+    </mat-form-field>
+    <div class="error-message">{{ errorMessage }}</div>
+    <div class="button-div">
+      <button mat-button [disabled]="registrationForm.invalid">Зареєструватися</button>
+    </div>
+  </form>
+</div>

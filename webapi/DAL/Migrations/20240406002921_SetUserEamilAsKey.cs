@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace webapi.Migrations
 {
     /// <inheritdoc />
-    public partial class SetEmailAsKey : Migration
+    public partial class SetUserEamilAsKey : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -83,6 +83,11 @@ namespace webapi.Migrations
             migrationBuilder.DropColumn(
                 name: "user_id",
                 table: "favourites");
+
+            migrationBuilder.RenameColumn(
+                name: "password",
+                table: "users",
+                newName: "city");
 
             migrationBuilder.RenameColumn(
                 name: "product_id",
@@ -310,6 +315,11 @@ namespace webapi.Migrations
             migrationBuilder.DropColumn(
                 name: "user_email",
                 table: "favourites");
+
+            migrationBuilder.RenameColumn(
+                name: "city",
+                table: "users",
+                newName: "password");
 
             migrationBuilder.RenameColumn(
                 name: "ProductId",
