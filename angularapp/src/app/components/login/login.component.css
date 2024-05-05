@@ -82,3 +82,19 @@ input[type=password]::-ms-clear {
   margin-bottom: 10px;
   color: red;
 }
+
+.login-button {
+  color: #333;
+  border: 1px solid #333;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+
+  .login-button:hover {
+    background-color: #333;
+    color: white;
+  }
+
+  .login-button:disabled {
+    border-width: 0.5px;
+  }

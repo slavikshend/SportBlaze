@@ -1,3 +1,7 @@
 <app-navbar></app-navbar>
-<app-body></app-body>
+<router-outlet></router-outlet>
 <app-footer></app-footer>
+<button *ngIf="showScrollToTopBtn" id="scrollToTopBtn" mat-icon-button (click)="scrollToTop()">
+  <mat-icon color="white">arrow_upward</mat-icon>
+</button>
+

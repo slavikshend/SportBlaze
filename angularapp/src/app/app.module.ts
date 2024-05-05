@@ -7,15 +7,33 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input'; 
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule } from '@angular/forms';
+import { NotfoundComponent } from './components/notfound/notfound.component';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { RegistrationComponent } from './components/registration/registration.component';
+import { CabinetComponent } from './components/cabinet/cabinet.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FooterComponent } from './components/footer/footer.component';
 import { BodyComponent } from './components/body/body.component';
+import { AppRoutingModule } from './routing/routing.module';
+import { MatMenuModule } from '@angular/material/menu';
+import { TokenInterceptor } from './token.interceptor';
+import { PasswordChangeComponent } from './components/password-change/password-change.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { BrandsComponent } from './components/brands/brands.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { ConfirmComponent } from './components/confirm/confirm.component';
+import { CategoriesComponent } from './components/categories/categories.component';
+import { SubCategoriesComponent } from './components/sub-categories/sub-categories.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { ProductsComponent } from './components/products/products.component';
+import { MatStepperModule } from '@angular/material/stepper';
+
+
 
 @NgModule({
   declarations: [
@@ -23,8 +41,18 @@ import { BodyComponent } from './components/body/body.component';
     NavbarComponent,
     LoginComponent,
     RegistrationComponent,
+    NotfoundComponent,
     FooterComponent,
-    BodyComponent
+    BodyComponent,
+    CabinetComponent,
+PasswordChangeComponent,
+ProfileComponent,
+BrandsComponent,
+ConfirmComponent,
+SubCategoriesComponent,
+CategoriesComponent,
+SubCategoriesComponent,
+ProductsComponent
   ],
   imports: [
     BrowserModule,
@@ -37,9 +65,17 @@ import { BodyComponent } from './components/body/body.component';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AppRoutingModule,
+    MatTooltipModule,
+    MatPaginatorModule,
+    MatMenuModule,
+    MatGridListModule,
+    MatStepperModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using webapi.BLL.Repos.Interfaces;
 using webapi.DAL.Context;
 using webapi.DAL.Entities.Main;
@@ -18,9 +16,16 @@ namespace webapi.BLL.Repos.Implementations
 
         public async Task<Category> CreateAsync(Category entity)
         {
-            _context.Categories.Add(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            try
+            {
+                _context.Categories.Add(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -40,7 +45,7 @@ namespace webapi.BLL.Repos.Implementations
         }
 
         public async Task<Category> GetByIdAsync(int id)
-        {   
+        {
             return await _context.Categories.FindAsync(id);
         }
 

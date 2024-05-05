@@ -1,91 +1,32 @@
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
-<p>body works!</p>
+<div class="product-display">
+  <div class="section-header">Акційні пропозиції</div>
+  <div class="product-section">
+    <div class="product-card" *ngFor="let product of specialOfferProducts">
+      <div class="image-container">
+        <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-image">
+      </div>
+      <div class="product-details">
+        <div class="product-name">{{ product.name }}</div>
+        <div class="product-price">
+          <span class="original-price" *ngIf="product.discount > 0">{{ product.price }}</span>
+          <span class="discounted-price">{{ product.discountedPrice }}</span>
+          <span class="discount" *ngIf="product.discount > 0">(-{{ product.discount }}%)</span>
+        </div>
+        <button class="favorite-button">
+          <mat-icon class="favourite-icon" [ngClass]="{ 'favourite': product.favourite }">favorite_border</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
 
-<p>body works!</p>
-<p>body works!</p>
+  <div class="section-header">Рекомендовані товари</div>
+  <div class="product-section">
+  </div>
+
+  <div class="section-header">Усі товари</div>
+  <div class="product-section">
+  </div>
+
+  <div class="paginator">
+  </div>
+</div>

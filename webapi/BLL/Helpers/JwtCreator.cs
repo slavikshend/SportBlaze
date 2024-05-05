@@ -15,11 +15,12 @@ namespace webapi.BLL.Helpers
             _jwtSettings = jwtSettings;
         }
 
-        public string GenerateJwtToken(string userEmail, string userRole)
+        public string GenerateJwtToken(string userEmail, string userRole, string userName)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, userEmail),
+            new Claim(ClaimTypes.Name, userName),
+            new Claim(ClaimTypes.Email, userEmail),
             };
 
             if (!string.IsNullOrEmpty(userRole))
@@ -34,7 +35,7 @@ namespace webapi.BLL.Helpers
                 _jwtSettings.Issuer,
                 _jwtSettings.Audience,
                 claims,
-                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.TokenExpirationInMinutes),
+                expires: DateTime.UtcNow.AddMonths(_jwtSettings.TokenExpirationInMonths),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

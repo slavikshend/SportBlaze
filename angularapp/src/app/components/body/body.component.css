@@ -1,0 +1,107 @@
+/* Add your custom styles here */
+
+.product-display {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.section-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.product-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.product-card {
+  width: 200px; /* Set card width */
+  height: 300px; /* Set card height */
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  position: relative;
+  transition: border-color 0.3s ease;
+}
+
+  .product-card:hover {
+    border-color: #333;
+  }
+
+  .product-card img {
+    max-width: 100%; /* Adjust image size */
+    max-height: 70%; /* Adjust image size */
+    display: block;
+    margin: 0 auto;
+  }
+
+.product-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.product-price {
+  font-size: 14px;
+  margin-bottom: 5px;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #999;
+  margin-right: 5px;
+}
+
+.discounted-price {
+  color: #333;
+}
+
+.discount {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.favorite-button {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  cursor: pointer;
+  border: none;
+background-color: transparent;
+}
+
+.favorite-icon {
+  border: 1px solid white; /* Add white border */
+  border-radius: 50%; /* Make the border circular */
+  padding: 5px; /* Add padding to ensure icon is not cut off */
+}
+
+  .favourite-icon.favourite {
+    color: #333; /* Change heart color to #333 when favorited */
+    border-color: #333; /* Change border color to #333 when favorited */
+  }
+
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 220px; /* Adjust height as needed */
+}
+
+.product-image {
+  max-width: 100%; /* Ensure image does not exceed container width */
+  max-height: 100%; /* Ensure image does not exceed container height */
+}

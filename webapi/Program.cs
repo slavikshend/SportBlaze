@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -12,6 +11,7 @@ using webapi.BLL.Services.Implementations;
 using webapi.BLL.Services.Interfaces;
 using webapi.DAL.Context;
 using webapi.DAL.Entities.Main;
+using AutoMapper;
 
 internal class Program
 {
@@ -19,6 +19,7 @@ internal class Program
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         var builder = WebApplication.CreateBuilder(args);
+        builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddDbContext<SportsShopDbContext>(options =>
@@ -39,12 +40,16 @@ internal class Program
                 };
             });
         builder.Services.AddSingleton(jwtSettings);
+        builder.Services.AddScoped<IProductRepo, ProductRepo>();
+        builder.Services.AddScoped<IProductService, ProductService>();
         builder.Services.AddScoped<IUserRepo, UserRepo>();
         builder.Services.AddScoped<IUserService, UserService>();
-        builder.Services.AddScoped<ICRUDRepo<Brand>, BrandRepo>();
-        builder.Services.AddScoped<ICRUDRepo<Category>, CategoryRepo>();
-        builder.Services.AddScoped<ICRUDRepo<Product>, ProductRepo>();
         builder.Services.AddScoped<ICRUDRepo<SubCategory>, SubCategoryRepo>();
+        builder.Services.AddScoped<ICRUDService<SubCategoryModel>, SubCategoryService>();
+        builder.Services.AddScoped<ICRUDRepo<Brand>, BrandRepo>();
+        builder.Services.AddScoped<ICRUDService<BrandModel>, BrandService>();
+        builder.Services.AddScoped<ICRUDRepo<Category>, CategoryRepo>();
+        builder.Services.AddScoped<ICRUDService<CategoryModel>, CategoryService>();
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAngularApp",
@@ -56,7 +61,6 @@ internal class Program
                            .AllowCredentials();
                 });
         });
-
 
         builder.Services.AddSwaggerGen(options =>
         {
@@ -72,6 +76,7 @@ internal class Program
         });
 
         var app = builder.Build();
+        app.UseCors("AllowAngularApp");
         app.UseAuthentication();
         app.UseAuthorization();
 
@@ -80,14 +85,8 @@ internal class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
-        app.UseHttpsRedirection();
-
-        app.UseAuthorization();
-
         app.MapControllers();
-        app.UseCors("AllowAngularApp");
-
+        app.UseHttpsRedirection();
         app.Run();
     }
 }

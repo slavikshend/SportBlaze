@@ -10,5 +10,7 @@ namespace webapi.DAL.Entities.Main
 
         [Column("image")]
         public string Image { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }

@@ -1,0 +1,61 @@
+.dialog-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #333;
+  font-weight: bold;
+}
+
+.dialog-title {
+  margin: 0;
+  font-size: 18px;
+  color: white;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+  .close-button mat-icon {
+    color: white;
+    transition: transform 0.3s ease;
+  }
+
+  .close-button:hover mat-icon {
+    color: lightgrey;
+  }
+
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.login-button {
+  color: #333;
+  border: 1px solid #333;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+
+  .login-button:hover {
+    background-color: #333;
+    color: white;
+  }
+
+  .login-button:disabled {
+    border-width: 0.5px;
+  }
+
+.dialog-actions {
+  padding: 0;
+margin-top: 20px;}

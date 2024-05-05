@@ -51,13 +51,8 @@
     color: gray;
   }
 
-  .container{
-    padding:10px 35px 0 35px;
-    margin:0;
-}
-
 .full-width {
-  width: 100%;
+  width:100%;
   margin-top: 5px;
   margin-bottom: 5px;
 }
@@ -75,9 +70,6 @@ justify-content: center;
 .registration-form {
   width: 100%;
 }
-full-width:last-child {
-  margin-top: 15px;
-}
 
 input[type=password]::-ms-reveal,
 input[type=password]::-ms-clear {
@@ -89,7 +81,24 @@ input[type=password]::-ms-clear {
   color: red;
 }
 
-.button-div {
-  margin-top: 10px; 
+.registration-form {
+  padding-left: 30px;
+  padding-right: 30px;
 }
+
+.registration-button {
+  color: #333;
+  border: 1px solid #333;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+
+  .registration-button:hover {
+    background-color: #333;
+    color: white;
+  }
+
+  .registration-button:disabled {
+    border-width: 0.5px;
+  }
 

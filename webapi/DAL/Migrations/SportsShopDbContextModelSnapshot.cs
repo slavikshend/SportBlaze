@@ -740,7 +740,7 @@ namespace webapi.Migrations
             modelBuilder.Entity("webapi.DAL.Entities.Main.Product", b =>
                 {
                     b.HasOne("webapi.DAL.Entities.Main.Brand", "Brand")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -787,6 +787,11 @@ namespace webapi.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("webapi.DAL.Entities.Main.Brand", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("webapi.DAL.Entities.Main.Category", b =>

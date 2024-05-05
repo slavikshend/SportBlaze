@@ -1,16 +1,12 @@
 .navbar {
-  top: 0;
-  width: 100%;
-  z-index: 1000;
   background-color: #333;
   color: white;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
 }
-
-
 
 .logo a {
   text-decoration: none;
@@ -42,8 +38,12 @@
     transition: transform 0.3s;
   }
 
-  .nav-buttons button:hover mat-icon {
-    transform: scale(1.3);
+  .cart mat-icon:hover{
+      transform: scale(1.2);
+  }
+
+  .acc_circle mat-icon:hover{
+      transform: scale(1.3);
   }
 
 .navbar {
@@ -52,12 +52,32 @@
 
 .login-menu {
   position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 1000; 
-  background-color: white; 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  top: calc(85%); 
+  right: 105px; 
+  transform: translateX(50%); 
+  z-index: 1000;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #ccc;
   padding: 10px;
 }
 
+  .login-menu.show {
+    display: block; 
+  }
+
+  .login-menu div {
+    cursor: pointer;
+    text-align: center;
+    padding: 4px; 
+  }
+
+    .login-menu div:not(:first-child):hover {
+      background-color: #f9f9f9; 
+    }
+
+    .login-menu div:first-child {
+      cursor: default;
+      font-weight: 600;
+      background-color: transparent;
+    }

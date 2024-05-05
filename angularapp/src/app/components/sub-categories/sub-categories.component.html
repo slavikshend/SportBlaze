@@ -1,0 +1,90 @@
+<div class="sub-category-container">
+  <div class="table-container">
+    <input style="margin-bottom:15px;" type="text" [ngModel]="searchQuery" (input)="updateSearchQuery($event)" placeholder="Пошук">
+    <button mat-icon-button class="add-sub-category-button" (click)="toggleFormVisibility()" matTooltip="Додати">
+      <mat-icon>{{ plusIcon ? 'add' : 'remove' }}</mat-icon>
+    </button>
+    <table>
+      <thead>
+        <tr>
+          <th (click)="toggleSortDirection()">
+            Назва<br>підкатегорії
+            <span class="sort-indicator" [ngClass]="{'asc': sortDirection === 'asc', 'desc': sortDirection === 'desc'}"></span>
+          </th>
+          <th>Фото</th>
+          <th>Опис</th>
+          <th>Категорія</th>
+          <th>Операції</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let subCategory of subCategories.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize)">
+          <td>{{ subCategory.name }}</td>
+          <td><img [src]="subCategory.imageUrl" alt="{{ subCategory.name }}" width="50" height="50"></td>
+          <td>{{ subCategory.description }}</td>
+          <td>
+            <div class="category-info">
+              <div>
+                <img [src]="subCategory.categoryImageUrl" alt="{{ subCategory.categoryName }}" width="50" height="50">
+              </div>
+              <div>{{ subCategory.categoryName }}</div>
+            </div>
+          </td>
+          <td>
+            <button mat-icon-button (click)="editSubCategory(subCategory)" matTooltip="Редагувати">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="openConfirmDialog(subCategory)" matTooltip="Видалити">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <mat-paginator [length]="totalItems"
+                   [pageSize]="pageSize"
+                   [pageIndex]="pageIndex"
+                   [pageSizeOptions]="pageSizeOptions"
+                   (page)="handlePageEvent($event)">
+    </mat-paginator>
+  </div>
+
+  <div class="form-container" *ngIf="showForm">
+    <form class="form-fields">
+      <mat-form-field class="form-field">
+        <input matInput placeholder="Назва підкатегорії" [(ngModel)]="subCategory.name" name="subCategoryName">
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <textarea matInput placeholder="Опис" [(ngModel)]="subCategory.description" name="subCategoryDescription"></textarea>
+      </mat-form-field>
+
+      <div class="button-wrapper">
+        <button mat-button [matMenuTriggerFor]="categoryMenu" class="choose-category-button">Оберіть категорію</button>
+      </div>
+      <mat-menu #categoryMenu="matMenu" class="category-menu">
+        <mat-grid-list cols="3" rowHeight="70px" gutterSize="5px" style="width: 250px;">
+          <mat-grid-tile *ngFor="let category of categories" (click)="assignCategory(category)" class="grid-tile">
+            <div class="grid-item">
+              <img [src]="category.image" alt="{{ category.name }}" width="50" height="50">
+              <div>{{ category.name }}</div>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-menu>
+
+      <div *ngIf="subCategory.categoryId" class="category-preview">
+        <img [src]="subCategory.categoryImageUrl" alt="{{ subCategory.categoryName }}" width="50" height="50">
+        <div>{{ subCategory.categoryName }}</div>
+      </div>
+      <div class="file-upload-container">
+        <input type="file" (change)="handleFileInput($event)" accept="image/*" id="fileInput">
+        <label for="fileInput" class="file-input-label">Оберіть фото</label>
+      </div>
+      <img style="display:block; margin:10px auto;" *ngIf="subCategory.imageUrl" [src]="subCategory.imageUrl" [alt]="subCategory.name" width="50" height="50">
+      <div class="form-buttons">
+        <button class="std-btn" mat-raised-button (click)="submitForm()">Зберегти</button>
+        <button class="cancel-btn" mat-raised-button (click)="resetForm()">Очистити</button>
+      </div>
+    </form>
+  </div>
+</div>

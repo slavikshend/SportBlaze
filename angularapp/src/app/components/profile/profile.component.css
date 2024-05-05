@@ -1,0 +1,53 @@
+.profile-container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-view {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  padding: 20px;
+}
+
+.profile-fields {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+}
+
+.field {
+  display: flex;
+  justify-content: center;
+}
+
+.field:last-child{
+    padding-top: 10px;
+}
+
+.save-button {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.std-btn {
+  color: #333;
+  border: 1px solid #333;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+
+  .std-btn:hover {
+    background-color: #333;
+    color: white;
+  }
+
+.message{
+    text-align: center;
+    font-size: 18px;
+}

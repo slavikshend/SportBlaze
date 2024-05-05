@@ -1,0 +1,39 @@
+<div class="profile-container">
+  <div class="profile-view">
+    <h2 style="text-align:center;">Мій профіль</h2>
+    <div class="profile-fields" *ngIf="user">
+      <div class="field">
+        <mat-form-field appearance="fill">
+          <input matInput placeholder="Ім'я" [(ngModel)]="user.firstName">
+        </mat-form-field>
+      </div>
+      <div class="field">
+        <mat-form-field appearance="fill">
+          <input matInput placeholder="Прізвище" [(ngModel)]="user.lastName">
+        </mat-form-field>
+      </div>
+      <div class="field">
+        <mat-form-field appearance="fill">
+          <input matInput placeholder="Номер телефону" [(ngModel)]="user.phone">
+        </mat-form-field>
+      </div>
+      <div class="field">
+        <mat-form-field appearance="fill">
+          <input matInput placeholder="Адреса" [(ngModel)]="user.address">
+        </mat-form-field>
+      </div>
+      <div class="field">
+        <mat-form-field appearance="fill">
+          <input matInput placeholder="Місто" [(ngModel)]="user.city">
+        </mat-form-field>
+      </div>
+      <div class="field">
+        <button mat-raised-button (click)="openPasswordChangeDialog()">Змінити пароль</button>
+      </div>
+    </div>
+    <div class="message" *ngIf="message">{{ message }}</div>
+    <div class="save-button">
+      <button class="std-btn" mat-raised-button (click)="saveProfile()">Зберегти</button>
+    </div>
+  </div>
+</div>

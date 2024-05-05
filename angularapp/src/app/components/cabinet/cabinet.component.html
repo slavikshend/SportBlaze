@@ -1,0 +1,22 @@
+<div class="uuu">
+  <div class="side-panel">
+    <ul>
+      <li routerLink="/cabinet/profile">Профіль</li>
+      <li><a href="#">Мої замовлення</a></li>
+      <li><a href="#">Закладки</a></li>
+      <ng-container *ngIf="isAdmin">
+        <hr>
+        <li><a href="#">Лог магазину</a></li>
+        <li routerLink="/cabinet/brands">Бренди</li>
+        <li routerLink="/cabinet/categories">Категорії</li>
+        <li routerLink="/cabinet/subcategories">Підкатегорії</li>
+        <li routerLink="/cabinet/products">Товари</li>
+        <li><a href="#">Замовлення</a></li>
+        <li><a href="#">Відгуки</a></li>
+      </ng-container>
+    </ul>
+  </div>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

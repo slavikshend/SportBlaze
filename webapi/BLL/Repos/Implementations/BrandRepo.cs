@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,9 +20,16 @@ namespace webapi.BLL.Repos.Implementations
 
         public async Task<Brand> CreateAsync(Brand entity)
         {
-            _context.Brands.Add(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            try
+            {
+                _context.Brands.Add(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task<bool> DeleteAsync(int id)

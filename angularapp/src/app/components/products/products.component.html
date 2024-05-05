@@ -1,0 +1,178 @@
+<div class="product-container">
+  <div class="table-container">
+    <input style="margin-bottom:15px;" type="text" [ngModel]="searchQuery" (input)="updateSearchQuery($event)" placeholder="Пошук">
+    <button mat-icon-button class="add-product-button" (click)="toggleFormVisibility()" matTooltip="Додати">
+      <mat-icon>{{ plusIcon ? 'add' : 'remove' }}</mat-icon>
+    </button>
+    <table>
+      <thead>
+        <tr>
+          <th (click)="toggleSortDirection()">
+            Назва<br>товару
+            <span class="sort-indicator" [ngClass]="{'asc': sortDirection === 'asc', 'desc': sortDirection === 'desc'}"></span>
+          </th>
+          <th>Опис</th>
+          <th (click)="toggleSortPriceDirection()">
+            Ціна
+            <span class="sort-indicator" [ngClass]="{'asc': sortPriceDirection === 'asc', 'desc': sortPriceDirection === 'desc'}"></span>
+          </th>
+          <th>Знижка</th>
+          <th (click)="toggleSortQuantityDirection()">
+            Кількість
+            <span class="sort-indicator" [ngClass]="{'asc': sortQuantityDirection === 'asc', 'desc': sortQuantityDirection === 'desc'}"></span>
+          </th>
+          <th>Зображення</th>
+          <th>Бренд</th>
+          <th>Підкатегорія</th>
+          <th>Характеристики</th>
+          <th>Операції</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize)">
+          <td>{{ product.name }}</td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.discount }}</td>
+          <td>{{ product.quantity }}</td>
+          <td><img [src]="product.imageUrl" alt="{{ product.name }}" width="50" height="50"></td>
+          <td>
+            <div class="brand-info">
+              <div>
+                <img [src]="product.brandImageUrl" alt="{{ product.brandName }}" width="50" height="50">
+              </div>
+              <div>{{ product.brandName }}</div>
+            </div>
+          </td>
+          <td>
+            <div class="sub-category-info">
+              <div>
+                <img [src]="product.subCategoryImageUrl" alt="{{ product.subCategoryName }}" width="50" height="50">
+              </div>
+              <div>{{ product.subCategoryName }}</div>
+            </div>
+          </td>
+          <td>
+            <div *ngFor="let feature of product.features">
+              {{ feature.name }}: {{ feature.value }} <br>
+            </div>
+          </td>
+          <td>
+            <button mat-icon-button (click)="editProduct(product)" matTooltip="Редагувати">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="openConfirmDialog(product)" matTooltip="Видалити">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+    <mat-paginator [length]="totalItems"
+                   [pageSize]="pageSize"
+                   [pageIndex]="pageIndex"
+                   [pageSizeOptions]="pageSizeOptions"
+                   (page)="handlePageEvent($event)">
+    </mat-paginator>
+  </div>
+
+  <div class="form-container" *ngIf="showForm">
+    <form class="form-fields">
+      <mat-form-field class="form-field">
+        <input matInput placeholder="Назва" [(ngModel)]="product.name" name="productName">
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <textarea matInput placeholder="Опис" [(ngModel)]="product.description" name="productDescription"></textarea>
+      </mat-form-field>
+      <div class="price-discount-input">
+        <mat-form-field class="form-field">
+          <mat-label>Ціна</mat-label>
+          <input matInput placeholder="Ціна" [(ngModel)]="product.price" name="productPrice">
+          <mat-hint align="end">Ціна</mat-hint>
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <mat-label>Знижка</mat-label>
+          <input matInput placeholder="Знижка" [(ngModel)]="product.discount" name="productDiscount" class="discount-input">
+          <mat-hint align="end">Знижка</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <h4 style="margin: 0 auto; font-size: 12px; text-align: center;">Кількість товару:</h4>
+      <div class="quantity-input">
+        <button type="button" class="quantity-button" (click)="decreaseQuantity()">-</button>
+        <input type="number" [(ngModel)]="product.quantity" id="productQuantity" name="productQuantity">
+        <button type="button" class="quantity-button" (click)="increaseQuantity()">+</button>
+      </div>
+
+      <div class="button-wrapper">
+        <div class="button-group">
+          <button mat-button [matMenuTriggerFor]="brandMenu" class="choose-brand-button">Оберіть бренд</button>
+          <mat-menu #brandMenu="matMenu" class="brand-menu">
+            <mat-grid-list cols="3" rowHeight="70px" gutterSize="5px" style="width: 250px;">
+              <mat-grid-tile *ngFor="let brand of brands" (click)="assignBrand(brand)" class="grid-tile">
+                <div class="grid-item">
+                  <img [src]="brand.image" alt="{{ brand.name }}" width="50" height="50">
+                  <div>{{ brand.name }}</div>
+                </div>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </mat-menu>
+          <div *ngIf="product.brandId" class="preview-container">
+            <div class="brand-preview">
+              <img [src]="product.brandImageUrl" alt="{{ product.brandName }}" width="50" height="50">
+              <div>{{ product.brandName }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="button-group">
+          <button mat-button [matMenuTriggerFor]="subCategoryMenu" class="choose-subcategory-button">Оберіть підкатегорію</button>
+          <mat-menu #subCategoryMenu="matMenu" class="subcategory-menu">
+            <mat-grid-list cols="3" rowHeight="70px" gutterSize="5px" style="width: 250px;">
+              <mat-grid-tile *ngFor="let subCategory of subCategories" (click)="assignSubCategory(subCategory)" class="grid-tile">
+                <div class="grid-item">
+                  <img [src]="subCategory.imageUrl" alt="{{ subCategory.name }}" width="50" height="50">
+                  <div>{{ subCategory.name }}</div>
+                </div>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </mat-menu>
+          <div *ngIf="product.subCategoryId" class="preview-container">
+            <div class="sub-category-preview">
+              <img [src]="product.subCategoryImageUrl" alt="{{ product.subCategoryName }}" width="50" height="50">
+              <div>{{ product.subCategoryName }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="characteristics-container">
+        <h4 class="characteristics-label">Характеристики:</h4> 
+        <div *ngFor="let feature of product.features; let i = index" class="characteristic-item">
+          <div class="input-container">
+            <mat-form-field class="form-field">
+              <input matInput placeholder="Назва" [(ngModel)]="feature.name" name="featureName_{{ i }}">
+            </mat-form-field>
+            <mat-form-field class="form-field">
+              <input matInput placeholder="Значення" [(ngModel)]="feature.value" name="featureValue_{{ i }}"> 
+            </mat-form-field>
+          </div>
+          <button mat-icon-button (click)="removeFeature(i)">
+            <mat-icon>remove</mat-icon>
+          </button>
+        </div>
+        <button mat-icon-button class="add-characteristic-button" (click)="addFeature()">+</button>
+      </div>
+
+      <div class="file-upload-container">
+        <input type="file" (change)="handleFileInput($event)" accept="image/*" id="fileInput">
+        <label for="fileInput" class="file-input-label">Оберіть фото</label>
+      </div>
+      <img style="display:block; margin:10px auto;" *ngIf="product.imageUrl" [src]="product.imageUrl" [alt]="product.name" width="50" height="50">
+
+      <div class="form-buttons">
+        <button class="std-btn" mat-raised-button (click)="submitForm()">Зберегти</button>
+        <button class="cancel-btn" mat-raised-button (click)="resetForm()">Очистити</button>
+      </div>
+    </form>
+  </div>
+</div>

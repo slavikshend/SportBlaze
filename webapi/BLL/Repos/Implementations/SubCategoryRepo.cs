@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using webapi.BLL.Repos.Interfaces;
 using webapi.DAL.Context;
@@ -16,10 +18,21 @@ namespace webapi.BLL.Repos.Implementations
             _context = context;
         }
 
-        public async Task<SubCategory> CreateAsync(SubCategory entity)
+        public async Task<IEnumerable<SubCategory>> GetAllAsync()
+        {
+            return await _context.SubCategories.Include(sc => sc.Category).ToListAsync();
+        }
+
+        public async Task<SubCategory> GetByIdAsync(int id)
+        {
+            return await _context.SubCategories.Include(sc => sc.Category).FirstOrDefaultAsync(sc => sc.Id == id);
+        }
+
+         public async Task<SubCategory> CreateAsync(SubCategory entity)
         {
             _context.SubCategories.Add(entity);
             await _context.SaveChangesAsync();
+            await _context.Entry(entity).Reference(sc => sc.Category).LoadAsync();
             return entity;
         }
 
@@ -34,29 +47,12 @@ namespace webapi.BLL.Repos.Implementations
             return true;
         }
 
-        public async Task<IEnumerable<SubCategory>> GetAllAsync()
-        {
-            return await _context.SubCategories.ToListAsync();
-        }
-
-        public async Task<SubCategory> GetByIdAsync(int id)
-        {
-            return await _context.SubCategories.FindAsync(id);
-        }
-
         public async Task<SubCategory> UpdateAsync(SubCategory entity)
         {
             _context.Update(entity);
             await _context.SaveChangesAsync();
+            await _context.Entry(entity).Reference(sc => sc.Category).LoadAsync();
             return entity;
-        }
-
-        public async Task<IEnumerable<SubCategory>> GetByCategoryNameAsync(string categoryName)
-        {
-            return await _context.SubCategories
-                .Include(sc => sc.Category)
-                .Where(sc => sc.Category.Name == categoryName)
-                .ToListAsync();
         }
     }
 }

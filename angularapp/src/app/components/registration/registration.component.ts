@@ -20,7 +20,10 @@ export class RegistrationComponent {
     this.registrationForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8), this.passwordValidator]], 
-      confirmPassword: ['', [Validators.required]]
+      confirmPassword: ['', [Validators.required]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      phoneNumber: ['', Validators.required],
     }, { validator: this.passwordMatchValidator }); 
   }
 
@@ -58,17 +61,23 @@ export class RegistrationComponent {
 
   register() {
     if (this.registrationForm.valid) {
-      const { email, password } = this.registrationForm.value;
+      const registrationData = this.registrationForm.value;
       this.errorMessage = null;
-      this.registrationService.register(email, password).subscribe(
-        (response: any) => {
+      this.registrationService.register(
+        registrationData.email,
+        registrationData.password,
+        registrationData.firstName,
+        registrationData.lastName,
+        registrationData.phoneNumber
+      ).subscribe(
+        (response) => {
           console.log('Registration response:', response);
           if (response && response.message === 'User registered successfully') {
             console.log('Registration successful.');
             this.dialogRef.close();
             this.dialog.open(LoginComponent, {
               width: '400px',
-              height: '380px',
+              height: '385px',
               autoFocus: false
             });
           } else {
@@ -76,7 +85,7 @@ export class RegistrationComponent {
             this.errorMessage = 'Помилка при реєстрації. Спробуйте ще раз.';
           }
         },
-        error => {
+        (error) => {
           console.error('Registration error:', error);
           if (error.status === 400 && error.error && error.error.message === 'User registration failed') {
             this.errorMessage = 'Користувач з такою поштою вже існує!';
@@ -87,6 +96,7 @@ export class RegistrationComponent {
       );
     }
   }
+
 
   passwordMatchValidator(control: AbstractControl): { [key: string]: boolean } | null {
     const password = control.get('password')?.value;

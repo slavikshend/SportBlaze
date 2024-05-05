@@ -9,7 +9,7 @@ namespace webapi.DAL.Entities.Main
         public string Name { get; set; }
 
         [Column("image")]
-        public string ImageUrl { get; set; }
+        public string Image { get; set; }
 
         public List<SubCategory> SubCategories { get; set; }
     }

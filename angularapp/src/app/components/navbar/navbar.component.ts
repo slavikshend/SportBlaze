@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RegistrationComponent } from '../registration/registration.component';
 import { LoginComponent } from '../login/login.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -10,13 +11,24 @@ import { LoginComponent } from '../login/login.component';
 })
 export class NavbarComponent {
   showLoginMenu: boolean = false;
-  userEmail: string | null = null;
-  constructor(private dialog: MatDialog) { }
+  userFirstName: string | null = null;
+  userRole: string | null = null;
+  constructor(private dialog: MatDialog, private router: Router) { }
+
+  ngOnInit(): void {
+    this.showLoginMenu = false;
+    window.addEventListener('storage', () => {
+      this.userFirstName = localStorage.getItem('userFirstName');
+      this.userRole = localStorage.getItem('userRole');
+    });
+    this.userFirstName = localStorage.getItem('userFirstName');
+    this.userRole = localStorage.getItem('userRole');
+  }
 
   openLoginDialog(): void {
     this.dialog.open(LoginComponent, {
       width: '400px',
-      height: '380px',
+      height: '385px',
       autoFocus: false
     });
   }
@@ -39,6 +51,10 @@ export class NavbarComponent {
 
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('userFirstName');
+    localStorage.removeItem('userRole');
+    this.userFirstName = null;
+    this.showLoginMenu = !this.showLoginMenu;
+    this.router.navigate(['/']);
   }
 }
-

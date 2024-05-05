@@ -38,6 +38,5 @@ namespace webapi.DAL.Entities.Main
         public ICollection<Feature> Features { get; set; }
         public ICollection<Favourites> Favourites { get; set; }
         public ICollection<OrderDetails> OrderDetails { get; set; }
-
     }
 }

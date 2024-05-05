@@ -1,0 +1,58 @@
+<div class="category-container">
+  <div class="table-container">
+    <input style="margin-bottom:15px;" type="text" [ngModel]="searchQuery" (input)="updateSearchQuery($event)" placeholder="Пошук">
+    <button mat-icon-button class="add-category-button" (click)="opecloseForm()" matTooltip="Додати">
+      <mat-icon>{{ plusIcon ? 'add' : 'remove' }}</mat-icon>
+    </button>
+    <table>
+      <thead>
+        <tr>
+          <th (click)="toggleSortDirection()">
+            Назва категорії
+            <span class="sort-indicator" [ngClass]="{'asc': sortDirection === 'asc', 'desc': sortDirection === 'desc'}"></span>
+          </th>
+          <th>Зображення</th>
+          <th>Операції</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let category of categories.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize)">
+          <td>{{ category.name }}</td>
+          <td>
+            <img [src]="category.image" alt="{{ category.name }}" [title]="category.name" width="50" height="50">
+          </td>
+          <td>
+            <button mat-icon-button (click)="editCategory(category)" *ngIf="category && category.id" matTooltip="Редагувати">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="openConfirmDialog(category)" matTooltip="Видалити">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <mat-paginator [length]="totalItems"
+                   [pageSize]="pageSize"
+                   [pageIndex]="pageIndex"
+                   [pageSizeOptions]="pageSizeOptions"
+                   (page)="handlePageEvent($event)">
+    </mat-paginator>
+  </div>
+  <div class="form-container" *ngIf="showForm">
+    <form class="form-fields">
+      <mat-form-field class="form-field">
+        <input matInput placeholder="Назва категорії" [(ngModel)]="category.name" name="categoryName">
+      </mat-form-field>
+      <div class="file-upload-container">
+        <input type="file" (change)="handleFileInput($event)" accept="image/*" id="fileInput">
+        <label for="fileInput" class="file-input-label">Оберіть фото</label>
+      </div>
+      <img style="display:block; margin:10px auto;" *ngIf="category.image" [src]="category.image" [title]="category.name" [alt]="category.name" width="50" height="50">
+      <div class="form-buttons">
+        <button class="std-btn" mat-raised-button (click)="submitForm()">Зберегти</button>
+        <button class="cancel-btn" mat-raised-button (click)="resetForm()">Очистити</button>
+      </div>
+    </form>
+  </div>
+</div>

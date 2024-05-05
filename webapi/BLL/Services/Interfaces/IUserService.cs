@@ -8,5 +8,7 @@ namespace webapi.BLL.Services.Interfaces
         Task<string> LoginAsync(LoginModel loginModel);
         Task<bool> RegisterAsync(RegisterModel registerModel);
         Task<bool> UpdateUserAsync(UserModel userModel, string email);
+        Task<UserModel> GetAsync(string email);
+        Task<bool> ChangePasswordAsync(string email, string oldPassword, string newPassword);
     }
 }

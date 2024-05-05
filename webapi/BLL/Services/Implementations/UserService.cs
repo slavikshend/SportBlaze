@@ -27,9 +27,7 @@ namespace webapi.BLL.Services.Implementations
             {
                 return null;
             }
-
-            var userRole = user.Role?.Name;
-            return _jwtCreator.GenerateJwtToken(user.Email, userRole);
+            return _jwtCreator.GenerateJwtToken(user.Email, user.Role?.Name, user.FirstName);
         }
 
         public async Task<bool> UpdateUserAsync(UserModel userModel, string email)
@@ -45,14 +43,6 @@ namespace webapi.BLL.Services.Implementations
             user.Phone = userModel.Phone;
             user.City = userModel.City;
             user.Address = userModel.Address;
-
-            if (!string.IsNullOrEmpty(userModel.Password))
-            {
-                var (hashedPassword, salt) = _passwordHasher.HashPassword(userModel.Password);
-
-                user.HashedPassword = hashedPassword;
-                user.Salt = salt;
-            }
 
             var result = await _userRepo.UpdateUser(user);
             return result != null;
@@ -72,6 +62,9 @@ namespace webapi.BLL.Services.Implementations
             {
                 Email = registerModel.Email,
                 HashedPassword = hashedPassword,
+                FirstName = registerModel.FirstName,
+                LastName = registerModel.LastName,
+                Phone = registerModel.PhoneNumber,
                 Salt = salt,
                 RoleId = 2 
             };
@@ -79,5 +72,46 @@ namespace webapi.BLL.Services.Implementations
             await _userRepo.AddUser(user);
             return true;
         }
+
+        public async Task<UserModel> GetAsync(string email)
+        {
+            var user = await _userRepo.GetRegisteredUser(email);
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Phone = user.Phone,
+                City = user.City,
+                Address = user.Address
+            };
+        }
+
+        public async Task<bool> ChangePasswordAsync(string email, string oldPassword, string newPassword)
+        {
+            var user = await _userRepo.GetRegisteredUser(email);
+            if (user == null)
+            {
+                return false;
+            }
+
+            if (!_passwordHasher.VerifyPassword(oldPassword, user.HashedPassword, user.Salt))
+            {
+                return false;
+            }
+
+            var (hashedNewPassword, newSalt) = _passwordHasher.HashPassword(newPassword);
+            user.HashedPassword = hashedNewPassword;
+            user.Salt = newSalt;
+
+            var result = await _userRepo.UpdateUser(user);
+            return result != null;
+        }
+
+
     }
 }

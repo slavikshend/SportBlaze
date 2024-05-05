@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -8,11 +8,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angularapp';
-}
+  showScrollToTopBtn: boolean = false;
 
-interface WeatherForecast {
-  date: string;
-  temperatureC: number;
-  temperatureF: number;
-  summary: string;
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.showScrollToTopBtn = window.scrollY > window.innerHeight;
+  }
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
