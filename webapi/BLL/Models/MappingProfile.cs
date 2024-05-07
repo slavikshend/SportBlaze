@@ -27,5 +27,16 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.SubCategoryId, opt => opt.MapFrom(src => src.SubCategoryId));
 
         CreateMap<FeatureModel, Feature>().ReverseMap();
+
+        CreateMap<Product, SimplifiedProductModel>()
+    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+    .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
+    .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+    .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+    .ForMember(dest => dest.Discount, opt => opt.MapFrom(src => src.Discount))
+    .ForMember(dest => dest.Rating, opt => opt.Ignore())
+    .ForMember(dest => dest.IsFavourite, opt => opt.Ignore());
+
     }
 }

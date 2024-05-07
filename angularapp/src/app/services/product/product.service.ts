@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../../interfaces/product';
+import { SimplifiedProduct } from '../../interfaces/simplified-product';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,11 @@ export class ProductService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  getSpecialOfferProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}/special-offers`);
+  getSpecialOfferProducts(): Observable<SimplifiedProduct[]> {
+    return this.http.get<SimplifiedProduct[]>(`${this.apiUrl}/special-offers`);
+  }
+
+  getSpecialOfferProductsAnon(): Observable<SimplifiedProduct[]> {
+    return this.http.get<SimplifiedProduct[]>(`${this.apiUrl}/special-offers-anon`);
   }
 }

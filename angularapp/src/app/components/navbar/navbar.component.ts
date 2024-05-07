@@ -56,5 +56,6 @@ export class NavbarComponent {
     this.userFirstName = null;
     this.showLoginMenu = !this.showLoginMenu;
     this.router.navigate(['/']);
+    window.location.reload(); 
   }
 }

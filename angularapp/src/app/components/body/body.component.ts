@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ProductService } from '../../services/product/product.service';
 import { FavouritesService } from '../../services/favourites/favourites.service';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-body',
@@ -13,21 +15,47 @@ export class BodyComponent {
 
   constructor(
     private productService: ProductService,
-    private favouritesService: FavouritesService
+    private favouritesService: FavouritesService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
-    this.loadSpecialOfferProducts();
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.loadSpecialOfferProducts();
+    } else {
+      this.loadSpecialOfferProductsAnon();
+    }
   }
 
   loadSpecialOfferProducts() {
     this.productService.getSpecialOfferProducts().subscribe((products: any[]) => {
       this.specialOfferProducts = products;
+      this.logProducts(products);
+    });
+  }
+
+  loadSpecialOfferProductsAnon() {
+    this.productService.getSpecialOfferProductsAnon().subscribe((products: any[]) => {
+      this.specialOfferProducts = products;
+      this.logProducts(products);
+    });
+  }
+
+  logProducts(products: any[]) {
+    products.forEach(product => {
+      console.log('Product:', product);
     });
   }
 
   toggleFavourite(product: any) {
-    if (product.favorite) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.openLoginDialog();
+      return;
+    }
+
+    if (product.isFavourite) {
       this.removeFromFavourites(product);
     } else {
       this.addToFavourites(product);
@@ -36,13 +64,22 @@ export class BodyComponent {
 
   addToFavourites(product: any) {
     this.favouritesService.addToFavourites(product.id).subscribe(() => {
-      product.favorite = true;
+      product.isFavourite = true;
     });
   }
 
   removeFromFavourites(product: any) {
     this.favouritesService.deleteFromFavourites(product.id).subscribe(() => {
-      product.favorite = false;
+      product.isFavourite = false;
     });
   }
+
+  openLoginDialog(): void {
+    this.dialog.open(LoginComponent, {
+      width: '400px',
+      height: '385px',
+      autoFocus: false
+    });
+  }
+
 }

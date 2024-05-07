@@ -12,21 +12,12 @@
           <span class="discounted-price">{{ product.discountedPrice }}</span>
           <span class="discount" *ngIf="product.discount > 0">(-{{ product.discount }}%)</span>
         </div>
-        <button class="favorite-button">
-          <mat-icon class="favourite-icon" [ngClass]="{ 'favourite': product.favourite }">favorite_border</mat-icon>
+        <button class="favorite-button" (click)="toggleFavourite(product)">
+          <mat-icon class="favourite-icon" *ngIf="product.isFavourite">favorite</mat-icon>
+          <mat-icon class="favourite-icon" *ngIf="!product.isFavourite">favorite_border</mat-icon>
         </button>
       </div>
     </div>
   </div>
 
-  <div class="section-header">Рекомендовані товари</div>
-  <div class="product-section">
-  </div>
-
-  <div class="section-header">Усі товари</div>
-  <div class="product-section">
-  </div>
-
-  <div class="paginator">
-  </div>
 </div>

@@ -6,13 +6,14 @@
   justify-content: space-between;
   align-items: center;
   position: fixed;
+  height: 70px;
 }
 
 .logo a {
   text-decoration: none;
   color: white;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .nav-buttons button {
@@ -22,7 +23,7 @@
   background-color: transparent;
   color: white;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 28px;
   transition: background-color 0.3s, transform 0.3s;
 }
 

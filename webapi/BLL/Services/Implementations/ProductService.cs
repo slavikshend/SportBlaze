@@ -67,8 +67,17 @@ namespace webapi.BLL.Services.Implementations
 
         public async Task<IEnumerable<SimplifiedProductModel>> GetSpecialOfferProductsAsync(string email)
         {
-            var specialOfferProducts = await _productRepo.GetSpecialOfferProductsAsync(email);
-            return _mapper.Map<IEnumerable<SimplifiedProductModel>>(specialOfferProducts);
+            var specialOfferProducts = await _productRepo.GetSpecialOfferProductsAsync();
+            var simplifiedProducts = _mapper.Map<IEnumerable<SimplifiedProductModel>>(specialOfferProducts);
+
+            foreach (var product in simplifiedProducts)
+            {
+                product.IsFavourite = specialOfferProducts.Any(p => p.Id == product.Id && p.Favourites.Any(f => f.UserEmail == email));
+
+            }
+
+            return simplifiedProducts;
         }
+
     }
 }

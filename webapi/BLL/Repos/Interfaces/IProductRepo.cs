@@ -4,7 +4,7 @@ namespace webapi.BLL.Repos.Interfaces
 {
     public interface IProductRepo : ICRUDRepo<Product>
     {
-        Task<IEnumerable<Product>> GetSpecialOfferProductsAsync(string email);
+        Task<IEnumerable<Product>> GetSpecialOfferProductsAsync();
     }
 
 }

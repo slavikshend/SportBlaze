@@ -71,7 +71,8 @@ namespace webapi.BLL.Repos.Implementations
             return await _context.Products
                 .Include(p => p.SubCategory)
                 .Include(p => p.Brand)
-                .Include(p => p.Features)
+                .Include(p => p.Favourites)
+                .Include(p => p.FeedBacks)
                 .Where(p => p.Discount > 0)
                 .ToListAsync();
         }

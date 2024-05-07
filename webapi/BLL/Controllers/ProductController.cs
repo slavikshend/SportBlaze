@@ -69,10 +69,18 @@ namespace webapi.BLL.Controllers
         }
 
         [HttpGet("special-offers")]
-        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<SimplifiedProductModel>>> GetSpecialOffers()
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            var specialOfferProducts = await _productService.GetSpecialOfferProductsAsync(email);
+            return Ok(specialOfferProducts);
+        }
+
+        [HttpGet("special-offers-anon")]
+        [AllowAnonymous]
+        public async Task<ActionResult<string>> GetSpecialOffersAnon()
+        {
+            var email = "none";
             var specialOfferProducts = await _productService.GetSpecialOfferProductsAsync(email);
             return Ok(specialOfferProducts);
         }
