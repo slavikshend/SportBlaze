@@ -8,6 +8,7 @@
     </button>
     <button class="cart" mat-icon-button class="cart-button" (click)="toggleCart()">
       <mat-icon>shopping_cart</mat-icon>
+      <div class="cart-item-count" *ngIf="cartItemCount > 0">{{ cartItemCount }}</div>
     </button>
   </div>
 </div>
@@ -16,5 +17,5 @@
   <div (click)="toggleLoginMenu()" routerLink="/cabinet">Особистий кабінет</div>
   <div (click)="logout()">Вихід з акаунту</div>
 </div>
-<app-cart *ngIf="showCartSidebar"></app-cart>
+<app-cart *ngIf="showCart"></app-cart>
 

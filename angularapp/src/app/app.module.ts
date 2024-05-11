@@ -78,7 +78,8 @@ CartComponent,
     MatMenuModule,
     MatGridListModule,
     MatStepperModule,
-    NgbModule
+    NgbModule,
+    
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }

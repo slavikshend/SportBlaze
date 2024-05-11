@@ -1,23 +1,28 @@
 <div class="product-display">
   <div class="section-header">Акційні пропозиції</div>
-  <div class="product-section">
+  <div class="product-grid">
     <div class="product-card" *ngFor="let product of specialOfferProducts">
       <div class="image-container">
-        <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-image">
+        <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-image" (click)="redirectToProductPage(product.id)">
       </div>
       <div class="product-details">
         <div class="product-name">{{ product.name }}</div>
         <div class="product-price">
-          <span class="original-price" *ngIf="product.discount > 0">{{ product.price }}</span>
-          <span class="discounted-price">{{ product.discountedPrice }}</span>
-          <span class="discount" *ngIf="product.discount > 0">(-{{ product.discount }}%)</span>
+          <span class="old-price" *ngIf="product.discount > 0">{{ product.price }}</span>
+          <div class="discount-info" *ngIf="product.discount > 0">
+            <span class="discount-percentage">(-{{ product.discount }}%)</span>
+            <span class="discounted-price">{{ calculateDiscountedPrice(product.price, product.discount) }}</span>
+          </div>
         </div>
         <button class="favorite-button" (click)="toggleFavourite(product)">
           <mat-icon class="favourite-icon" *ngIf="product.isFavourite">favorite</mat-icon>
           <mat-icon class="favourite-icon" *ngIf="!product.isFavourite">favorite_border</mat-icon>
         </button>
+        <button class="add-to-cart-button" (click)="addToCart(product)">
+          <mat-icon>shopping_cart</mat-icon>
+        </button>
       </div>
     </div>
   </div>
-
 </div>
+<app-cart *ngIf="showCart"></app-cart>

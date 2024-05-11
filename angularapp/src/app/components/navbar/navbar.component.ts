@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { RegistrationComponent } from '../registration/registration.component';
 import { LoginComponent } from '../login/login.component';
 import { Router } from '@angular/router';
+import { CartService } from '../../services/cart/cart.service';
+import { ProductService } from '../../services/product/product.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,8 +16,9 @@ export class NavbarComponent {
   userFirstName: string | null = null;
   userRole: string | null = null;
   showCart: boolean = false;
+  cartItemCount: number = 0; 
 
-  constructor(private dialog: MatDialog, private router: Router) { }
+  constructor(private dialog: MatDialog, private router: Router, private cartService: CartService, private productService: ProductService) { }
 
   ngOnInit(): void {
     this.showLoginMenu = false;
@@ -25,6 +28,9 @@ export class NavbarComponent {
     });
     this.userFirstName = localStorage.getItem('userFirstName');
     this.userRole = localStorage.getItem('userRole');
+    this.cartService.cartItems$.subscribe(items => {
+      this.cartItemCount = items.length;
+    });
   }
 
   openLoginDialog(): void {
@@ -63,5 +69,11 @@ export class NavbarComponent {
 
   toggleCart(): void { 
     this.showCart = !this.showCart;
+  }
+
+  searchProductsByName(name: string): void {
+    this.productService.searchProductsByName(name).subscribe(products => {
+      console.log('Search results:', products);
+    });
   }
 }

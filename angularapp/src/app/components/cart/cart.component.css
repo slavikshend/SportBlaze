@@ -1,14 +1,14 @@
 .sidebar {
   position: fixed;
-  top: 0;
+  top: 95px;
   right: 0;
-  height: 100%;
-  width: 300px; /* Adjust width as needed */
-  background-color: #333; /* Changed to dark color */
-  color: white; /* Text color changed to white */
+  bottom: 50px;
+  width: 300px;
+  background-color: #333;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  transition: transform 0.3s ease;
 }
 
 .dialog-header {
@@ -17,7 +17,7 @@
   align-items: center;
   background-color: #333;
   font-weight: bold;
-  margin-bottom: 30px;
+  height: 60px;
 }
 
   .dialog-header h2 {
@@ -39,19 +39,17 @@
 .close-button {
   position: absolute;
   top: 10px;
-  right: 10px;
+  left: 10px;
   background-color: transparent;
   border: none;
 }
-
-  .close-button:hover mat-icon {
-    color: gray;
-  }
 
 .cart-items {
   flex: 1;
   padding: 10px;
   overflow-y: auto;
+  background-color: white;
+  transition: background-color 0.3s ease;
 }
 
 .empty-cart-message {
@@ -63,18 +61,113 @@
   margin-bottom: 10px;
   padding: 10px;
   border: 1px solid #ccc;
+  display: flex;
+  position: relative;
+}
+
+.cart-item-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cart-item-image-container {
+  flex: 0 0 auto;
+}
+
+.cart-item-details {
+  flex: 1;
 }
 
 .sidebar-footer {
   padding: 10px;
-  background-color: #333;
   text-align: center;
+  background-color: white;
 }
 
   .sidebar-footer button {
-    color: white;
+    color: #333;
+    border: 1px solid #333;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+    background-color: white;
   }
 
     .sidebar-footer button:hover {
-      background-color: #555;
+      background-color: #333;
+      color: white;
     }
+
+    .sidebar-footer button:disabled {
+      border-width: 0.5px;
+    }
+
+.cart-item-image {
+  width: 70px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.delete-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: transparent;
+  color: #333;
+  border: none;
+  cursor: pointer;
+}
+
+.quantity-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+  .quantity-input input[type="number"] {
+    width: 40px;
+    padding: 5px; 
+    text-align: center;
+    font-size: 14px;
+  }
+
+.quantity-button {
+  color: #333;
+  border: 1px solid #333;
+  transition: all 0.3s ease;
+  padding: 3px 7px; /* Adjust padding as needed */
+  background-color: #F5F5F5;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0 5px; /* Adjust margin as needed */
+  font-size: 12px; /* Adjust font size as needed */
+}
+
+  .quantity-button:hover {
+    background-color: #333;
+    color: white;
+  }
+
+  .quantity-button:disabled {
+    background-color: #F5F5F5;
+    color: #999;
+    cursor: not-allowed;
+  }
+
+.cart-item-image-container {
+  flex: 0 0 auto;
+}
+
+.cart-item-details {
+  flex: 1;
+}
+
+.quantity-input input[type="number"]::-webkit-inner-spin-button,
+.quantity-input input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

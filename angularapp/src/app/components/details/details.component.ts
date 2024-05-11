@@ -4,6 +4,10 @@ import { ProductService } from '../../services/product/product.service';
 import { FeedbackService } from '../../services/feedback/feedback.service';
 import { ProductDetails } from '../../interfaces/product-details';
 import { Feedback } from '../../interfaces/feedback';
+import { CartService } from '../../services/cart/cart.service';
+import { CartItem } from '../../interfaces/cart-item';
+import { LoginComponent } from '../login/login.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-details',
@@ -26,12 +30,14 @@ export class DetailsComponent implements OnInit {
     features: []
   };
   averageRating: number = 0;
-  newFeedback: Feedback = { rating: 0, comment: '', date: new Date(), email: '' }; // Use the Feedback interface
-
+  newFeedback: Feedback = { rating: 0, comment: '', date: new Date(), email: '' };
+  showCart: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private feedbackService: FeedbackService
+    private feedbackService: FeedbackService,
+    private cartService: CartService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -46,6 +52,19 @@ export class DetailsComponent implements OnInit {
     }
 
     this.getAllProductFeedbacks();
+  }
+
+  addToCart(): void {
+    const cartItem: CartItem = {
+      id: this.product.id,
+      name: this.product.name,
+      quantity: 1,
+      price: this.product.price,
+      discount: this.product.discount,
+      imageUrl: this.product.imageUrl
+    };
+    this.cartService.addToCart(cartItem);
+this.showCart = true;
   }
 
   getProductDetails(id: number): void {
@@ -76,16 +95,17 @@ export class DetailsComponent implements OnInit {
     return originalPrice - (originalPrice * (discount / 100));
   }
 
-  addToCart(): void {
-    console.log('Product added to cart:', this.product);
-  }
-
   setRating(rating: number): void {
     this.newFeedback.rating = rating;
     console.log('Rating:', rating);
   }
 
   submitFeedback(): void {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.openLoginDialog();
+      return;
+    }
     this.newFeedback.date = new Date();
     this.feedbackService.addFeedback(this.productId, this.newFeedback).subscribe(
       (addedFeedback: Feedback) => {
@@ -97,6 +117,14 @@ export class DetailsComponent implements OnInit {
         console.error('Error adding feedback:', error);
       }
     );
+  }
+
+  openLoginDialog(): void {
+    this.dialog.open(LoginComponent, {
+      width: '400px',
+      height: '385px',
+      autoFocus: false
+    });
   }
 
   getAllProductFeedbacks(): void {

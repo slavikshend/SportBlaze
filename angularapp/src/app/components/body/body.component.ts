@@ -3,6 +3,11 @@ import { ProductService } from '../../services/product/product.service';
 import { FavouritesService } from '../../services/favourites/favourites.service';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginComponent } from '../login/login.component';
+import { CartService } from '../../services/cart/cart.service';
+import { Product } from '../../interfaces/product';
+import { SimplifiedProduct } from '../../interfaces/simplified-product';
+import { CartItem } from '../../interfaces/cart-item';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-body',
@@ -12,11 +17,13 @@ import { LoginComponent } from '../login/login.component';
 export class BodyComponent {
 
   specialOfferProducts: any[] = [];
-
+  showCart: boolean = false; 
   constructor(
     private productService: ProductService,
     private favouritesService: FavouritesService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private cartService: CartService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -82,4 +89,24 @@ export class BodyComponent {
     });
   }
 
+  addToCart(product: SimplifiedProduct): void {
+    const cartItem: CartItem = {
+      id: product.id,
+      name: product.name,
+      quantity: 1,
+      imageUrl: product.imageUrl,
+      discount: product.discount,
+      price: product.price
+    };
+
+    this.cartService.addToCart(cartItem);
+    this.showCart = true;
+  }
+  redirectToProductPage(productId: number): void {
+    this.router.navigate(['/products', productId]);
+  }
+
+  calculateDiscountedPrice(price: number, discount: number): number {
+    return price - (price * (discount / 100));
+  }
 }

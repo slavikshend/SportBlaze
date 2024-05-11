@@ -1,4 +1,4 @@
-<div class="sidebar">
+<div class="sidebar" *ngIf="showCart">
   <div class="dialog-header">
     <h2 style="margin: 0 auto; color: white;">Кошик</h2>
     <button mat-icon-button class="close-button" (click)="closeCart()">
@@ -11,11 +11,28 @@
     </div>
     <ng-template #cartItemsList>
       <div *ngFor="let item of cartItems" class="cart-item">
-        <div>{{ item.name }}</div>
-        <div>{{ item.quantity }}</div>
-        <div>{{ item.price }}</div>
+        <button mat-icon-button class="delete-button" (click)="removeItem(item)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <div class="cart-item-content">
+          <div class="cart-item-image-container">
+            <img [src]="item.imageUrl" alt="{{ item.name }}" class="cart-item-image">
+          </div>
+          <div class="cart-item-details">
+            <div>{{ item.name }}</div>
+            <div class="quantity-input">
+              <button type="button" class="quantity-button" (click)="decreaseQuantity(item)">-</button>
+              <input type="number" [(ngModel)]="item.quantity" id="productQuantity" name="productQuantity">
+              <button type="button" class="quantity-button" [disabled]="item.quantity >= 10" (click)="increaseQuantity(item)">+</button>
+            </div>
+            <div>{{ calculateDiscountedPrice(item.price, item.discount) * item.quantity }}</div>
+          </div>
+        </div>
       </div>
     </ng-template>
+    <div *ngIf="!isCartEmpty()" class="total-sum">
+      <div>До сплати: {{ calculateTotalSum() }}</div>
+    </div>
   </div>
   <div class="sidebar-footer">
     <button *ngIf="!isCartEmpty()" (click)="placeOrder()">Оформити замовлення</button>
