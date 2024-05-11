@@ -10,11 +10,11 @@ namespace webapi.DAL.Entities.Main
         [Required]
         public string LogMessage { get; set; }
 
-        [Column("timestamp")]
+        [Column("log_timestamp")]
         [Required]
         public DateTimeOffset TimeStamp { get; set; }
 
-        [Column("loglevel")]
+        [Column("log_level")]
         [Required]
         public string LogLevel { get; set; }
     }

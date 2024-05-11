@@ -84,5 +84,18 @@ namespace webapi.BLL.Controllers
             var specialOfferProducts = await _productService.GetSpecialOfferProductsAsync(email);
             return Ok(specialOfferProducts);
         }
+
+        [HttpGet("{id}/details")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ProductDetailsModel>> GetProductDetailsById(int id)
+        {
+            var productDetails = await _productService.GetProductDetailsByIdAsync(id);
+            if (productDetails == null)
+            {
+                return NotFound();
+            }
+            return Ok(productDetails);
+        }
     }
+
 }

@@ -1,3 +1,5 @@
+import { Feature } from "./feature";
+
 export interface Product {
   id: number;
   name: string;
@@ -13,9 +15,4 @@ export interface Product {
   subCategoryName: string;
   subCategoryImageUrl: string;
   features: Feature[];
-}
-
-export interface Feature {
-  name: string;
-  value: string;
 }

@@ -18,4 +18,8 @@ export class FavouritesService {
   deleteFromFavourites(productId: number): Observable<void> {
     return this.http.delete<void>(`${this.favouritesUrl}/${productId}`);
   }
+
+  getFavoriteProducts(): Observable<any[]> {
+    return this.http.get<any[]>(this.favouritesUrl);
+  }
 }

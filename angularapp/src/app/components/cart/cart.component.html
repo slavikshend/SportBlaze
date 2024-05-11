@@ -1,0 +1,23 @@
+<div class="sidebar">
+  <div class="dialog-header">
+    <h2 style="margin: 0 auto; color: white;">Кошик</h2>
+    <button mat-icon-button class="close-button" (click)="closeCart()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="cart-items">
+    <div *ngIf="isCartEmpty(); else cartItemsList">
+      <div class="empty-cart-message">Кошик порожній</div>
+    </div>
+    <ng-template #cartItemsList>
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <div>{{ item.name }}</div>
+        <div>{{ item.quantity }}</div>
+        <div>{{ item.price }}</div>
+      </div>
+    </ng-template>
+  </div>
+  <div class="sidebar-footer">
+    <button *ngIf="!isCartEmpty()" (click)="placeOrder()">Оформити замовлення</button>
+  </div>
+</div>

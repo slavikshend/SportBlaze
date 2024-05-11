@@ -1,0 +1,23 @@
+<div class="favorite-products">
+  <div class="section-header">Закладки</div>
+  <div class="product-grid" *ngIf="favoriteProducts.length > 0; else noFavorites">
+    <div class="product-card" *ngFor="let product of favoriteProducts">
+      <div class="image-container" (click)="redirectToProductPage(product.id)">
+        <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-image">
+      </div>
+      <div class="product-details">
+        <div class="product-name">{{ product.name }}</div>
+        <div class="product-price">{{ product.price }}</div>
+        <button class="favorite-button" (click)="removeFromFavorites(product)">
+          <mat-icon class="favourite-icon">favorite</mat-icon>
+        </button>
+      </div>
+      <button class="add-to-cart-button">
+        <mat-icon>shopping_cart</mat-icon>
+      </button>
+    </div>
+  </div>
+  <ng-template #noFavorites>
+    <div class="no-favorites-message">Немає продуктів</div>
+  </ng-template>
+</div>

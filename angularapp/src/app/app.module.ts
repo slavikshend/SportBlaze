@@ -32,7 +32,10 @@ import { SubCategoriesComponent } from './components/sub-categories/sub-categori
 import { MatGridListModule } from '@angular/material/grid-list';
 import { ProductsComponent } from './components/products/products.component';
 import { MatStepperModule } from '@angular/material/stepper';
-
+import { FavouritesComponent } from './components/favourites/favourites.component';
+import { DetailsComponent } from './components/details/details.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CartComponent } from './components/cart/cart.component';
 
 
 @NgModule({
@@ -52,7 +55,10 @@ ConfirmComponent,
 SubCategoriesComponent,
 CategoriesComponent,
 SubCategoriesComponent,
-ProductsComponent
+ProductsComponent,
+FavouritesComponent,
+DetailsComponent,
+CartComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,7 +77,8 @@ ProductsComponent
     MatPaginatorModule,
     MatMenuModule,
     MatGridListModule,
-    MatStepperModule
+    MatStepperModule,
+    NgbModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }

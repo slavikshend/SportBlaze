@@ -8,6 +8,8 @@ import { BrandsComponent } from '../components/brands/brands.component';
 import { CategoriesComponent } from '../components/categories/categories.component';
 import { SubCategoriesComponent } from '../components/sub-categories/sub-categories.component';
 import { ProductsComponent } from '../components/products/products.component';
+import { FavouritesComponent } from '../components/favourites/favourites.component';
+import { DetailsComponent } from '../components/details/details.component';
 
 const routes: Routes = [
   { path: '', component: BodyComponent },
@@ -21,8 +23,10 @@ const routes: Routes = [
       { path: 'categories', component: CategoriesComponent },
       { path: 'subcategories', component: SubCategoriesComponent },
       { path: 'products', component: ProductsComponent },
+      { path: 'favourites', component: FavouritesComponent },
     ]
   },
+  { path: 'products/:id', component: DetailsComponent },
   { path: '**', component: NotfoundComponent }
 ];
 

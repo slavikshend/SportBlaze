@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using webapi.DAL.Entities.MN;
 
 namespace webapi.DAL.Entities.Support
 {
@@ -7,5 +8,6 @@ namespace webapi.DAL.Entities.Support
     {
         [Column("name")]
         public string Name { get; set; }
+        public ICollection<Payment> Payments { get; set; }
     }
 }

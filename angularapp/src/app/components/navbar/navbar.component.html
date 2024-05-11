@@ -6,7 +6,7 @@
     <button class="acc_circle" mat-icon-button (click)="isLoggedIn() ? toggleLoginMenu() : openLoginDialog()">
       <mat-icon>account_circle</mat-icon>
     </button>
-    <button class="cart" mat-icon-button class="cart-button">
+    <button class="cart" mat-icon-button class="cart-button" (click)="toggleCart()">
       <mat-icon>shopping_cart</mat-icon>
     </button>
   </div>
@@ -16,3 +16,5 @@
   <div (click)="toggleLoginMenu()" routerLink="/cabinet">Особистий кабінет</div>
   <div (click)="logout()">Вихід з акаунту</div>
 </div>
+<app-cart *ngIf="showCartSidebar"></app-cart>
+

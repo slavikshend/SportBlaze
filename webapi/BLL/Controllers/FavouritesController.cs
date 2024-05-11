@@ -42,5 +42,18 @@ namespace webapi.BLL.Controllers
             await _favouritesService.DeleteFromFavourites(productId, userEmail);
             return Ok();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFavouriteProducts()
+        {
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return BadRequest("User email not found in claims.");
+            }
+
+            var favouriteProducts = await _favouritesService.GetFavouriteProducts(userEmail);
+            return Ok(favouriteProducts);
+        }
     }
 }

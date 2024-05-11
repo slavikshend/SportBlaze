@@ -12,14 +12,14 @@ namespace webapi.DAL.Entities.Main
         [Column("user_email")]
         public string UserEmail { get; set; }
 
+        [Column("payment_id")]
+        [Required]
+        [ForeignKey("Payment")]
+        public int PaymentId { get; set; }
+
         [Column("order_date")]
         [Required]
         public DateTimeOffset OrderDate { get; set; }
-
-        [Column("payment_method_id")]
-        [Required]
-        [ForeignKey("PaymentMethod")]
-        public int PaymentMethodId { get; set; }
 
         [Column("delivery_method_id")]
         [Required]
@@ -40,7 +40,7 @@ namespace webapi.DAL.Entities.Main
         public User User { get; set; }
         public ICollection<OrderDetails> OrderDetails { get; set; }
         public OrderStatus OrderStatus { get; set; }
-        public PaymentMethod PaymentMethod { get; set; }
+        public Payment Payment { get; set; }
         public DeliveryMethod DeliveryMethod { get; set; }
     }
 }

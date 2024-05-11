@@ -13,6 +13,8 @@ export class NavbarComponent {
   showLoginMenu: boolean = false;
   userFirstName: string | null = null;
   userRole: string | null = null;
+  showCart: boolean = false;
+
   constructor(private dialog: MatDialog, private router: Router) { }
 
   ngOnInit(): void {
@@ -57,5 +59,9 @@ export class NavbarComponent {
     this.showLoginMenu = !this.showLoginMenu;
     this.router.navigate(['/']);
     window.location.reload(); 
+  }
+
+  toggleCart(): void { 
+    this.showCart = !this.showCart;
   }
 }

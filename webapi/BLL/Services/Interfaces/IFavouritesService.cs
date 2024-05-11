@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using webapi.BLL.Models;
 
 namespace webapi.BLL.Services.Interfaces
 {
@@ -6,5 +7,7 @@ namespace webapi.BLL.Services.Interfaces
     {
         Task AddToFavourites(int productId, string userEmail);
         Task DeleteFromFavourites(int productId, string userEmail);
+
+        Task<IEnumerable<SimplifiedProductModel>> GetFavouriteProducts(string userEmail);
     }
 }

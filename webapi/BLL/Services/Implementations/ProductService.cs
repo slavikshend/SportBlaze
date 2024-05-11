@@ -79,5 +79,11 @@ namespace webapi.BLL.Services.Implementations
             return simplifiedProducts;
         }
 
+        public async Task<ProductDetailsModel> GetProductDetailsByIdAsync(int id)
+        {
+            var product = await _productRepo.GetProductDetailsByIdAsync(id);
+            return _mapper.Map<ProductDetailsModel>(product);
+        }
+
     }
 }

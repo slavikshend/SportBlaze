@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../../interfaces/product';
 import { SimplifiedProduct } from '../../interfaces/simplified-product';
+import { ProductDetails } from '../../interfaces/product-details'; // Import the product details interface
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +40,9 @@ export class ProductService {
 
   getSpecialOfferProductsAnon(): Observable<SimplifiedProduct[]> {
     return this.http.get<SimplifiedProduct[]>(`${this.apiUrl}/special-offers-anon`);
+  }
+
+  getProductDetailsById(id: number): Observable<ProductDetails> {
+    return this.http.get<ProductDetails>(`${this.apiUrl}/${id}/details`);
   }
 }

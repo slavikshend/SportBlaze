@@ -1,0 +1,80 @@
+<div class="product-details">
+  <div class="general-product-info">
+    <div class="product-image">
+      <img [src]="product.imageUrl" alt="{{ product.name }}">
+    </div>
+    <div class="product-info">
+      <h2>{{ product.name }}</h2>
+      <div class="brand">Виробник: {{ product.brand }}</div>
+      <div class="rating">
+        <span *ngFor="let star of [1, 2, 3, 4, 5]" class="material-icons">
+          {{ getStarIcon(star) }}
+        </span>
+      </div>
+      <div class="sub-category">Підкатегорія: {{ product.subCategory }}</div>
+      <div class="price">
+        <div class="final-price">
+          {{ product.discount > 0 ? calculateDiscountedPrice(product.price, product.discount) : product.price }}<span class="currency"> грн</span>
+        </div>
+        <div class="discount" *ngIf="product.discount > 0">
+          <div class="original-price">{{ product.price }}<span class="currency"> грн</span></div>
+          <div class="discount-amount"><span class="discount-percent">-{{ product.discount }}%</span></div>
+        </div>
+      </div>
+      <div class="features">
+        <table>
+          <thead>
+            <tr>
+              <th>Характеристики</th>
+              <th>Значення</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let feature of product.features">
+              <td>{{ feature.name }}</td>
+              <td>{{ feature.value }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button class="cart-button" [disabled]="product.quantity === 0" (click)="addToCart()">
+        <span>Додати до корзини</span>
+        <mat-icon>shopping_cart</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="product-desc-feedback">
+    <div class="product-description">
+      <h3>Опис товару</h3>
+      <p>{{ product.description }}</p>
+    </div>
+    <div class="feedbacks">
+      <h3>Відгуки</h3>
+      <div class="existing-feedbacks">
+        <div class="feedback-frame" *ngFor="let feedback of product.feedbacks">
+          <div class="feedback-info">
+            <p>Рейтинг:</p>
+            <div class="star-rating">
+              <span *ngFor="let star of [1, 2, 3, 4, 5]" [ngClass]="{ 'filled-star': star <= feedback.rating, 'empty-star': star > feedback.rating }">&#9733;</span>
+            </div>
+            <p>{{ feedback.email }}</p>
+            <p>Час: {{ feedback.date | date:'short' }}</p>
+          </div>
+          <div class="feedback-comment">
+            <p>{{ feedback.comment }}</p>
+          </div>
+        </div>
+      </div>
+<hr>
+<div class="new-feedback">
+  <h4>Залишити відгук</h4>
+  <ngb-rating [(rate)]="newFeedback.rating" [max]="5" [readonly]="false" (rateChange)="setRating($event)"></ngb-rating>
+
+  <textarea [(ngModel)]="newFeedback.comment" placeholder="Напишіть ваш коментар"></textarea>
+  <button class="add-feedback-button" (click)="submitFeedback()">
+    <span>Надіслати відгук</span>
+  </button>
+</div>
+    </div>
+  </div>
+</div>

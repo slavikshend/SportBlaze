@@ -42,6 +42,5 @@ namespace webapi.DAL.Entities.Main
         public ICollection<Favourites> Favourites { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<FeedBack> FeedBacks { get; set; }
-        public ICollection<Payment> Payments { get; set; }
     }
 }

@@ -76,5 +76,15 @@ namespace webapi.BLL.Repos.Implementations
                 .Where(p => p.Discount > 0)
                 .ToListAsync();
         }
+
+        public async Task<Product> GetProductDetailsByIdAsync(int id)
+        {
+            return await _context.Products
+                .Include(p => p.SubCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.Features)
+                .Include(p => p.FeedBacks)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
     }
 }

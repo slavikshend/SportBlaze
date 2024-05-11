@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using webapi.BLL.Repos.Interfaces;
 using webapi.DAL.Context;
+using webapi.DAL.Entities.Main;
 using webapi.DAL.Entities.MN;
 
 namespace webapi.BLL.Repos.Implementations
@@ -36,5 +37,15 @@ namespace webapi.BLL.Repos.Implementations
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<IEnumerable<Product>> GetFavouriteProductsAsync(string userEmail)
+        {
+            return await _context.Products
+                .Where(p => p.Favourites.Any(f => f.UserEmail == userEmail))
+                .Include(p => p.SubCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.FeedBacks)
+                .ToListAsync();
+        }
+
     }
 }
