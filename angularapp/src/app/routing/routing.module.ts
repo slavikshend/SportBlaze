@@ -10,6 +10,7 @@ import { SubCategoriesComponent } from '../components/sub-categories/sub-categor
 import { ProductsComponent } from '../components/products/products.component';
 import { FavouritesComponent } from '../components/favourites/favourites.component';
 import { DetailsComponent } from '../components/details/details.component';
+import { OrderComponent } from '../components/order/order.component';
 
 const routes: Routes = [
   { path: '', component: BodyComponent },
@@ -27,7 +28,8 @@ const routes: Routes = [
     ]
   },
   { path: 'products/:id', component: DetailsComponent },
-  { path: '**', component: NotfoundComponent }
+  { path: 'makeorder', component: OrderComponent },
+  { path: '**', component: NotfoundComponent },
 ];
 
 

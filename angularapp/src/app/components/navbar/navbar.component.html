@@ -1,6 +1,14 @@
 <div class="navbar">
   <div class="logo">
-    <a href="#">Головна</a>
+    <a href="#">SportBlaze
+    </a>
+  </div>
+  <div class="search">
+    <input type="text" [(ngModel)]="searchValue" (input)="searchProducts()" placeholder="Пошук...">
+    <button (click)="searchProducts()" class="search-icon">
+      <mat-icon>search</mat-icon>
+    </button>
+    <button (click)="clearSearchInput()">Очистити</button>
   </div>
   <div class="nav-buttons">
     <button class="acc_circle" mat-icon-button (click)="isLoggedIn() ? toggleLoginMenu() : openLoginDialog()">
@@ -18,4 +26,3 @@
   <div (click)="logout()">Вихід з акаунту</div>
 </div>
 <app-cart *ngIf="showCart"></app-cart>
-

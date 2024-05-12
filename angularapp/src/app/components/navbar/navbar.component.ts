@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RegistrationComponent } from '../registration/registration.component';
 import { LoginComponent } from '../login/login.component';
 import { Router } from '@angular/router';
 import { CartService } from '../../services/cart/cart.service';
 import { ProductService } from '../../services/product/product.service';
+import { SearchService } from '../../services/search/search.service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,8 +18,8 @@ export class NavbarComponent {
   userRole: string | null = null;
   showCart: boolean = false;
   cartItemCount: number = 0; 
-
-  constructor(private dialog: MatDialog, private router: Router, private cartService: CartService, private productService: ProductService) { }
+  searchValue: string = '';
+  constructor(private searchService: SearchService, private dialog: MatDialog, private router: Router, private cartService: CartService, private productService: ProductService) { }
 
   ngOnInit(): void {
     this.showLoginMenu = false;
@@ -33,6 +34,10 @@ export class NavbarComponent {
     });
   }
 
+  searchProducts(): void {
+    this.searchService.sendSearchQuery(this.searchValue);
+  }
+
   openLoginDialog(): void {
     this.dialog.open(LoginComponent, {
       width: '400px',
@@ -40,6 +45,11 @@ export class NavbarComponent {
       autoFocus: false
     });
   }
+
+  clearSearchInput(): void {
+    this.searchValue = '';
+  }
+
 
   toggleLoginMenu(): void {
     this.showLoginMenu = !this.showLoginMenu;
@@ -71,9 +81,5 @@ export class NavbarComponent {
     this.showCart = !this.showCart;
   }
 
-  searchProductsByName(name: string): void {
-    this.productService.searchProductsByName(name).subscribe(products => {
-      console.log('Search results:', products);
-    });
-  }
+
 }

@@ -85,5 +85,12 @@ namespace webapi.BLL.Services.Implementations
             return _mapper.Map<ProductDetailsModel>(product);
         }
 
+        public async Task<IEnumerable<SimplifiedProductModel>> SearchProductsByNameAsync(string name)
+        {
+            var products = await _productRepo.SearchProductsByNameAsync(name);
+            return _mapper.Map<IEnumerable<SimplifiedProductModel>>(products);
+        }
+
+
     }
 }

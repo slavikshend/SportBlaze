@@ -86,5 +86,16 @@ namespace webapi.BLL.Repos.Implementations
                 .Include(p => p.FeedBacks)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
+
+        public async Task<IEnumerable<Product>> SearchProductsByNameAsync(string name)
+        {
+            return await _context.Products
+                .Include(p => p.SubCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.Features)
+                .Where(p => p.Name.Contains(name))
+                .ToListAsync();
+        }
+
     }
 }

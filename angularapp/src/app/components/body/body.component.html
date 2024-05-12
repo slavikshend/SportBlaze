@@ -8,10 +8,10 @@
       <div class="product-details">
         <div class="product-name">{{ product.name }}</div>
         <div class="product-price">
-          <span class="old-price" *ngIf="product.discount > 0">{{ product.price }}</span>
+          <span class="old-price" *ngIf="product.discount > 0">{{ product.price }} грн.</span>
           <div class="discount-info" *ngIf="product.discount > 0">
             <span class="discount-percentage">(-{{ product.discount }}%)</span>
-            <span class="discounted-price">{{ calculateDiscountedPrice(product.price, product.discount) }}</span>
+            <span class="discounted-price">{{ calculateDiscountedPrice(product.price, product.discount) }} грн.</span>
           </div>
         </div>
         <button class="favorite-button" (click)="toggleFavourite(product)">

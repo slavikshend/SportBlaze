@@ -8,6 +8,7 @@ import { Product } from '../../interfaces/product';
 import { SimplifiedProduct } from '../../interfaces/simplified-product';
 import { CartItem } from '../../interfaces/cart-item';
 import { Router } from '@angular/router';
+import { SearchService } from '../../services/search/search.service';
 
 @Component({
   selector: 'app-body',
@@ -17,14 +18,17 @@ import { Router } from '@angular/router';
 export class BodyComponent {
 
   specialOfferProducts: any[] = [];
-  showCart: boolean = false; 
+  showCart: boolean = false;
+
   constructor(
+    private searchService: SearchService,
     private productService: ProductService,
     private favouritesService: FavouritesService,
     private dialog: MatDialog,
     private cartService: CartService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
@@ -33,12 +37,26 @@ export class BodyComponent {
     } else {
       this.loadSpecialOfferProductsAnon();
     }
+    this.searchService.searchQuery$.subscribe((query: string) => {
+      console.log('Received search query:', query);
+      this.searchProducts(query);
+    });
   }
 
-  loadSpecialOfferProducts() {
+  searchProducts(query: string): void {
+    if (query.trim() !== '') {
+      this.productService.searchProductsByName(query).subscribe((products: any[]) => {
+        this.specialOfferProducts = products;
+        console.log('Search results:', products);
+      });
+    } else {
+      this.loadSpecialOfferProducts();
+    }
+  }
+
+    loadSpecialOfferProducts() {
     this.productService.getSpecialOfferProducts().subscribe((products: any[]) => {
       this.specialOfferProducts = products;
-      this.logProducts(products);
     });
   }
 

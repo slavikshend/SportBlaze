@@ -96,6 +96,15 @@ namespace webapi.BLL.Controllers
             }
             return Ok(productDetails);
         }
+
+        [HttpGet("search")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<SimplifiedProductModel>>> SearchProductsByName(string name)
+        {
+            var products = await _productService.SearchProductsByNameAsync(name);
+            return Ok(products);
+        }
     }
+
 
 }

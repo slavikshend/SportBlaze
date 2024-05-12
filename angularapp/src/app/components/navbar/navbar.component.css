@@ -12,8 +12,9 @@
 .logo a {
   text-decoration: none;
   color: white;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 20px;
+  font-family: 
 }
 
 .nav-buttons button {
@@ -96,3 +97,24 @@
   align-items: center;
   font-size: 12px;
 }
+.search {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+  .search input {
+    padding: 5px;
+    width: 200px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .search button {
+    margin-left: 5px;
+    padding: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+  }

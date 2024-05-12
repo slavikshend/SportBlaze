@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CartItem } from '../../interfaces/cart-item';
 import { CartService } from '../../services/cart/cart.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -8,7 +9,7 @@ import { CartService } from '../../services/cart/cart.service';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent {
-  constructor(private cartService: CartService) { }
+  constructor(private cartService: CartService, private router: Router) { }
 
   ngOnInit(): void {
     this.cartService.cartItems$.subscribe(items => {
@@ -32,7 +33,8 @@ export class CartComponent {
   }
 
   placeOrder(): void {
-    console.log('Placing order...');
+    this.showCart = false;
+    this.router.navigate(['/makeorder']);
   }
 
   removeItem(item: CartItem): void {

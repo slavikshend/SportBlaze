@@ -36,6 +36,9 @@ import { FavouritesComponent } from './components/favourites/favourites.componen
 import { DetailsComponent } from './components/details/details.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CartComponent } from './components/cart/cart.component';
+import { OrderComponent } from './components/order/order.component';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -59,6 +62,7 @@ ProductsComponent,
 FavouritesComponent,
 DetailsComponent,
 CartComponent,
+OrderComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,6 +83,9 @@ CartComponent,
     MatGridListModule,
     MatStepperModule,
     NgbModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatOptionModule
     
   ],
   providers: [
