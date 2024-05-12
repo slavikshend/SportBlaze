@@ -52,6 +52,7 @@ export class LoginComponent {
           localStorage.setItem('token', token);
           localStorage.setItem('userFirstName', userFirstName);
           localStorage.setItem('userRole', userRole);
+          localStorage.setItem('userEmail', email);
           this.dialogRef.close();
           window.location.reload();
         },

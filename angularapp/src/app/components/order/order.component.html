@@ -15,53 +15,59 @@
         </div>
       </div>
     </div>
-    <div class="order-details">
-      <mat-form-field appearance="fill">
-        <mat-label>Ім'я'</mat-label>
-        <input matInput type="text" formControlName="firstName">
-        <mat-error *ngIf="orderForm.get('firstName')?.invalid && orderForm.get('firstName')?.touched">Поле є обов'язковим</mat-error>
-      </mat-form-field>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <div class="order-details">
+        <mat-form-field appearance="fill">
+          <mat-label>Ім'я'</mat-label>
+          <input matInput type="text" formControlName="firstName">
+          <mat-error *ngIf="orderForm.get('firstName')?.invalid && orderForm.get('firstName')?.touched">Поле є обов'язковим</mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Прізвище</mat-label>
-        <input matInput type="text" formControlName="lastName">
-        <mat-error *ngIf="orderForm.get('lastName')?.invalid && orderForm.get('lastName')?.touched">Поле є обов'язковим</mat-error>
-      </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Прізвище</mat-label>
+          <input matInput type="text" formControlName="lastName">
+          <mat-error *ngIf="orderForm.get('lastName')?.invalid && orderForm.get('lastName')?.touched">Поле є обов'язковим</mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Номер телефону</mat-label>
-        <input matInput type="tel" formControlName="phone">
-        <mat-error *ngIf="orderForm.get('phone')?.invalid && orderForm.get('phone')?.touched">Поле є обов'язковим</mat-error>
-      </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Номер телефону</mat-label>
+          <input matInput type="tel" formControlName="phone">
+          <mat-error *ngIf="orderForm.get('phone')?.invalid && orderForm.get('phone')?.touched">Поле є обов'язковим</mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Місто</mat-label>
-        <input matInput type="text" formControlName="city">
-        <mat-error *ngIf="orderForm.get('city')?.invalid && orderForm.get('city')?.touched">Поле є обов'язковим</mat-error>
-      </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Місто</mat-label>
+          <input matInput type="text" formControlName="city">
+          <mat-error *ngIf="orderForm.get('city')?.invalid && orderForm.get('city')?.touched">Поле є обов'язковим</mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Адреса</mat-label>
-        <input matInput type="text" formControlName="address">
-        <mat-error *ngIf="orderForm.get('address')?.invalid && orderForm.get('address')?.touched">Поле є обов'язковим</mat-error>
-      </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Адреса</mat-label>
+          <input matInput type="text" formControlName="address">
+          <mat-error *ngIf="orderForm.get('address')?.invalid && orderForm.get('address')?.touched">Поле є обов'язковим</mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Метод оплати</mat-label>
-        <mat-select formControlName="paymentMethod">
-          <mat-option *ngFor="let method of paymentMethods" [value]="method.id">{{ method.name }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="orderForm.get('paymentMethod')?.invalid && orderForm.get('paymentMethod')?.touched">Поле є обов'язковим</mat-error>
-      </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Метод оплати</mat-label>
+          <mat-select formControlName="paymentMethod">
+            <mat-option *ngFor="let method of paymentMethods" [value]="method.id">{{ method.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="orderForm.get('paymentMethod')?.invalid && orderForm.get('paymentMethod')?.touched">Поле є обов'язковим</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Електронна пошта</mat-label>
+          <input matInput type="email" formControlName="email">
+          <mat-error *ngIf="orderForm.get('email')?.invalid && orderForm.get('email')?.touched">Поле є обов'язковим</mat-error>
+        </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Метод доставки</mat-label>
-        <mat-select formControlName="deliveryMethod">
-          <mat-option *ngFor="let method of deliveryMethods" [value]="method.id">{{ method.name }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="orderForm.get('deliveryMethod')?.invalid && orderForm.get('deliveryMethod')?.touched">Поле є обов'язковим</mat-error>
-      </mat-form-field>
-
+        <mat-form-field appearance="fill">
+          <mat-label>Метод доставки</mat-label>
+          <mat-select formControlName="deliveryMethod">
+            <mat-option *ngFor="let method of deliveryMethods" [value]="method.id">{{ method.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="orderForm.get('deliveryMethod')?.invalid && orderForm.get('deliveryMethod')?.touched">Поле є обов'язковим</mat-error>
+        </mat-form-field>
+      </div>
       <button mat-raised-button class="order-btn" type="submit" [disabled]="!orderForm.valid || isCartEmpty()">Оформити замовлення</button>
     </div>
   </div>

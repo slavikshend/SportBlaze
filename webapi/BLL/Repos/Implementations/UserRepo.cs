@@ -29,9 +29,25 @@ namespace webapi.BLL.Repos.Implementations
         }
         public async Task<User> AddUser(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            return user;
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+
+            if (existingUser != null)
+            {
+                if (existingUser.RoleId == 3)
+                {
+                    existingUser.RoleId = 2;
+                    _context.Users.Update(existingUser);
+                    await _context.SaveChangesAsync();
+                    return existingUser;
+                }
+                else return null;
+            }
+            else
+            {
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+                return user;
+            }
         }
     }
 }

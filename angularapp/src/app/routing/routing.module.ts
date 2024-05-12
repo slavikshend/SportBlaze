@@ -11,6 +11,7 @@ import { ProductsComponent } from '../components/products/products.component';
 import { FavouritesComponent } from '../components/favourites/favourites.component';
 import { DetailsComponent } from '../components/details/details.component';
 import { OrderComponent } from '../components/order/order.component';
+import { PaymentComponent } from '../components/payment/payment.component';
 
 const routes: Routes = [
   { path: '', component: BodyComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
     ]
   },
   { path: 'products/:id', component: DetailsComponent },
+  { path: 'payment', component: PaymentComponent },
   { path: 'makeorder', component: OrderComponent },
   { path: '**', component: NotfoundComponent },
 ];

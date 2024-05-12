@@ -39,6 +39,7 @@ import { CartComponent } from './components/cart/cart.component';
 import { OrderComponent } from './components/order/order.component';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { PaymentComponent } from './components/payment/payment.component';
 
 
 @NgModule({
@@ -63,6 +64,7 @@ FavouritesComponent,
 DetailsComponent,
 CartComponent,
 OrderComponent,
+PaymentComponent,
   ],
   imports: [
     BrowserModule,

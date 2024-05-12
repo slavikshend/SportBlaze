@@ -12,11 +12,6 @@ namespace webapi.DAL.Entities.Main
         [Column("user_email")]
         public string UserEmail { get; set; }
 
-        [Column("payment_id")]
-        [Required]
-        [ForeignKey("Payment")]
-        public int PaymentId { get; set; }
-
         [Column("order_date")]
         [Required]
         public DateTimeOffset OrderDate { get; set; }
