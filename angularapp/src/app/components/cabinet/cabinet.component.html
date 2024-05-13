@@ -2,7 +2,7 @@
   <div class="side-panel">
     <ul>
       <li routerLink="/cabinet/profile">Профіль</li>
-      <li><a href="#">Мої замовлення</a></li>
+      <li routerLink="/cabinet/myorders">Мої замовлення</li>
       <li routerLink="/cabinet/favourites">Закладки</li>
       <ng-container *ngIf="isAdmin">
         <hr>
@@ -13,7 +13,7 @@
         <li routerLink="/cabinet/products">Товари</li>
         <li routerLink="/cabinet/allorders">Замовлення</li>
         <li><a href="#">Відгуки</a></li>
-        <li><a href="#">Звіт</a></li>
+        <li><a href="#">Звіт магазину</a></li>
       </ng-container>
     </ul>
   </div>

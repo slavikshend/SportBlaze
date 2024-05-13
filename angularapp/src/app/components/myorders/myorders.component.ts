@@ -1,23 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { OrderItemModel, OrderModel } from '../../interfaces/order-model';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { OrderModel } from '../../interfaces/order-model';
 import { OrderService } from '../../services/order/order.service';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-all-orders',
-  templateUrl: './all-orders.component.html',
-  styleUrls: ['./all-orders.component.css']
+  selector: 'app-my-orders',
+  templateUrl: './myorders.component.html',
+  styleUrls: ['./myorders.component.css']
 })
-export class AllOrdersComponent implements OnInit {
+export class MyOrdersComponent implements OnInit {
   orders: OrderModel[] = [];
   searchQuery: string = '';
   pageIndex: number = 0;
   pageSize: number = 5;
   totalItems: number = 0;
   pageSizeOptions: number[] = [5, 10, 20];
-  sortDirection: 'asc' | 'desc' = 'asc';
-  sortField: string = 'total';
   orderStatuses: string[] = [
     'Нове замовлення',
     'Підтверджено',
@@ -31,40 +28,22 @@ export class AllOrdersComponent implements OnInit {
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
-  constructor(private orderService: OrderService, private dialog: MatDialog) { }
+  constructor(private orderService: OrderService) { }
 
   ngOnInit(): void {
     this.loadOrders();
   }
 
   loadOrders(): void {
-    this.orderService.getAllOrders().subscribe(
+    const userEmail = localStorage.getItem('userEmail');
+    this.orderService.getUserOrders(userEmail!).subscribe(
       (orders: OrderModel[]) => {
         this.orders = orders;
-        console.log('Orders:', this.orders);
         this.totalItems = this.orders.length;
         this.filterOrders();
-        this.sortOrdersByDate();
         this.paginator.firstPage();
       }
     );
-  }
-
-  toggleSortDirection(): void {
-    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    this.sortOrdersByDate();
-  }
-
-  sortOrdersByDate(): void {
-    this.orders.sort((a, b) => {
-      const dateA = new Date(a.orderDate);
-      const dateB = new Date(b.orderDate);
-      if (this.sortDirection === 'asc') {
-        return dateA.getTime() - dateB.getTime();
-      } else {
-        return dateB.getTime() - dateA.getTime();
-      }
-    });
   }
 
   handlePageEvent(event: PageEvent): void {
@@ -73,7 +52,6 @@ export class AllOrdersComponent implements OnInit {
   }
 
   updateOrderStatus(order: OrderModel, statusText: string): void {
-    console.log('Changing order status:', order.id, statusText);
     const statusId = this.getStatusIdByText(statusText);
     this.orderService.changeOrderStatus(order.id, statusId).subscribe(
       (response: any) => {
@@ -86,40 +64,20 @@ export class AllOrdersComponent implements OnInit {
   }
 
   filterOrders(): void {
-    if(this.searchQuery) {
-    this.orders = this.orders.filter(order =>
-      order.id.toString().includes(this.searchQuery)
-    );
-  }
-}
-
-updateSearchQuery(event: any): void {
-  const value = event.target ? event.target.value : null;
-  if(value !== null) {
-  this.searchQuery = value;
-  this.loadOrders();
-}
-}
-
-  sortByTotal(): void {
-    this.sortField = 'total';
-    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    this.sortOrders();
+    if (this.searchQuery) {
+      this.orders = this.orders.filter(order =>
+        order.id.toString().includes(this.searchQuery)
+      );
+    }
   }
 
-  sortOrders(): void {
-    this.orders.sort((a, b) => {
-      if (this.sortField === 'total') {
-        return this.sortDirection === 'asc' ? a.total - b.total : b.total - a.total;
-      } else if (this.sortField === 'orderDate') {
-        const dateA = new Date(a.orderDate);
-        const dateB = new Date(b.orderDate);
-        return this.sortDirection === 'asc' ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
-      }
-      return 0;
-    });
+  updateSearchQuery(event: any): void {
+    const value = event.target ? event.target.value : null;
+    if (value !== null) {
+      this.searchQuery = value;
+      this.loadOrders();
+    }
   }
-
 
   getStatusIdByText(statusText: string): number {
     switch (statusText) {

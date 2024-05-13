@@ -15,7 +15,7 @@ export class PaymentComponent implements OnInit {
   @ViewChild('paymentRef', { static: true }) paymentRef!: ElementRef;
   buttonRendered: boolean = false;
 
-  constructor(private router: Router, private cartService: CartService, private http: HttpClient, private orderService: OrderService ) { }
+  constructor(private router: Router, private cartService: CartService, private http: HttpClient, private orderService: OrderService) { }
 
   ngOnInit(): void {
     this.amount = this.cartService.getTotalSum();

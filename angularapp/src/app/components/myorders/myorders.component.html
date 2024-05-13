@@ -4,17 +4,17 @@
     <table>
       <thead>
         <tr>
-          <th (click)="toggleSortDirection()">
+          <th>
             Номер замовлення
-            <span class="sort-indicator" [ngClass]="{'asc': sortDirection === 'asc', 'desc': sortDirection === 'desc'}"></span>
           </th>
           <th style="max-width: 300px;">
             Статус замовлення
           </th>
-          <th>Дата замовлення</th>
-          <th (click)="sortByTotal()" [ngClass]="{'sorted': sortField === 'total'}">
+          <th>
+            Дата замовлення
+          </th>
+          <th>
             Сума
-            <span class="sort-indicator" [ngClass]="{'asc': sortField === 'total' && sortDirection === 'asc', 'desc': sortField === 'total' && sortDirection === 'desc'}"></span>
           </th>
           <th>Клієнт</th>
           <th>Адреса доставки</th>
@@ -30,7 +30,9 @@
             <mat-form-field appearance="fill">
               <mat-label>Статус замовлення</mat-label>
               <mat-select [(ngModel)]="order.status" (selectionChange)="updateOrderStatus(order, $event.value)">
-                <mat-option *ngFor="let status of orderStatuses" [value]="status">{{ status }}</mat-option>
+                <mat-option value="Скасовано клієнтом">Скасовано клієнтом</mat-option>
+                <mat-option *ngIf="!order.status" [value]="null" disabled selected>Оберіть статус</mat-option>
+                <mat-option *ngIf="order.status" [value]="order.status">{{ order.status }}</mat-option>
               </mat-select>
             </mat-form-field>
 

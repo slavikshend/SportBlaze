@@ -106,5 +106,25 @@ namespace webapi.BLL.Repos.Implementations
                 throw;
             }
         }
+
+        public async Task<IEnumerable<Order>> GetUserOrders(string userEmail)
+        {
+            try
+            {
+                return await _context.Orders
+                    .Where(o => o.UserEmail == userEmail)
+                    .Include(o => o.OrderDetails)
+                    .Include(o => o.User)
+                    .Include(o => o.DeliveryMethod)
+                    .Include(o => o.Payment).ThenInclude(p => p.PaymentMethod)
+                    .Include(o => o.OrderStatus)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting user orders: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

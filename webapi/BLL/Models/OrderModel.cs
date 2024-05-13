@@ -12,7 +12,7 @@
         public string PaymentName { get; set; }
         public string Status { get; set; }
         public DateTimeOffset OrderDate { get; set; }
-        public bool IsPaymentSuccessfull { get; set; }
+        public bool IsPaymentSuccessful { get; set; }
         public decimal Total { get; set; }
         public IEnumerable<OrderItemModel> OrderItems { get; set; }
     }

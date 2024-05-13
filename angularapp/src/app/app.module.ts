@@ -43,6 +43,7 @@ import { PaymentComponent } from './components/payment/payment.component';
 import { PaymentSuccessComponent } from './components/payment-success/payment-success.component';
 import { ShopLogComponent } from './components/shop-log/shop-log.component';
 import { AllOrdersComponent } from './components/all-orders/all-orders.component';
+import { MyOrdersComponent } from './components/myorders/myorders.component';
 
 
 @NgModule({
@@ -71,6 +72,7 @@ PaymentComponent,
 PaymentSuccessComponent,
 ShopLogComponent,
 AllOrdersComponent,
+    MyOrdersComponent,
   ],
   imports: [
     BrowserModule,

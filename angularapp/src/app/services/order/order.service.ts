@@ -35,8 +35,14 @@ export class OrderService {
     return this.http.get<OrderModel[]>(this.baseUrl);
   }
 
-  ChangeOrderStatus(orderId: number, statusId: number): Observable<any> {
-    const url = `${this.baseUrl}/${orderId}/status`;
-    return this.http.put<any>(url, { statusId });
+  changeOrderStatus(orderId: number, statusId: number): Observable<any> {
+    const url = `${this.baseUrl}/${orderId}/status/${statusId}`;
+    return this.http.put<any>(url, null);
   }
+
+  getUserOrders(userEmail: string): Observable<OrderModel[]> {
+    const url = `${this.baseUrl}/user/${userEmail}/orders`;
+    return this.http.get<OrderModel[]>(url);
+  }
+
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using webapi.BLL.Models;
 using webapi.BLL.Repos.Implementations;
 using webapi.BLL.Repos.Interfaces;
@@ -120,10 +121,16 @@ namespace webapi.BLL.Services.Implementations
                 {
                     return false;
                 }
+
                 order.Payment.isCompleted = true;
                 await _orderRepo.UpdateOrder(order);
 
                 return true;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                Console.WriteLine($"Database update error adding payment: {dbEx.Message}");
+                return false;
             }
             catch (Exception ex)
             {
@@ -152,7 +159,7 @@ namespace webapi.BLL.Services.Implementations
                 PaymentName = order.Payment?.PaymentMethod?.Name,
                 Status = order.OrderStatus?.Name,
                 OrderDate = order.OrderDate,
-                IsPaymentSuccessfull = order.Payment?.isCompleted ?? false,
+                IsPaymentSuccessful = order.Payment.isCompleted,
                 Total = order.Total,
                 OrderItems = order.OrderDetails?.Select(od => new OrderItemModel
                 {
@@ -182,6 +189,19 @@ namespace webapi.BLL.Services.Implementations
             {
                 Console.WriteLine($"Error changing order status: {ex.Message}");
                 return false;
+            }
+        }
+        public async Task<IEnumerable<OrderModel>> GetUserOrders(string userEmail)
+        {
+            try
+            {
+                var orders = await _orderRepo.GetUserOrders(userEmail);
+                return orders.Select(o => MapToOrderModel(o));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving user orders: {ex.Message}");
+                throw; 
             }
         }
     }
