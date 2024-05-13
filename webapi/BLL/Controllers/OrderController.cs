@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using webapi.BLL.Models;
@@ -72,6 +73,41 @@ namespace webapi.BLL.Controllers
             {
                 Console.WriteLine($"Error adding payment: {ex.Message}");
                 return StatusCode(500, "An unexpected error occurred while adding the payment");
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,RegisteredUser")]
+        public async Task<ActionResult<IEnumerable<OrderModel>>> GetAllOrders()
+        {
+            try
+            {
+                var orders = await _orderService.GetAllOrders();
+                return Ok(orders);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving orders: {ex.Message}");
+                return StatusCode(500, "An unexpected error occurred while retrieving orders");
+            }
+        }
+        [HttpPut("{orderId}/status")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ChangeOrderStatus(int orderId, [FromBody] int statusId)
+        {
+            try
+            {
+                bool success = await _orderService.ChangeOrderStatus(orderId, statusId);
+                if (!success)
+                {
+                    return NotFound();
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error changing order status: {ex.Message}");
+                return StatusCode(500, "An unexpected error occurred while changing the order status");
             }
         }
     }

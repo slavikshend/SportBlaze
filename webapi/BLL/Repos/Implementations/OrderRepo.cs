@@ -87,5 +87,24 @@ namespace webapi.BLL.Repos.Implementations
                 throw;
             }
         }
+
+        public async Task<IEnumerable<Order>> GetAllOrders()
+        {
+            try
+            {
+                return await _context.Orders
+                    .Include(o => o.OrderDetails)
+                    .Include(o => o.User)
+                    .Include(o => o.DeliveryMethod)
+                    .Include(o => o.Payment).ThenInclude(p => p.PaymentMethod)
+                    .Include(o => o.OrderStatus)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting all orders: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

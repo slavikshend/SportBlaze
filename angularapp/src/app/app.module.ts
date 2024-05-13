@@ -40,6 +40,9 @@ import { OrderComponent } from './components/order/order.component';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { PaymentComponent } from './components/payment/payment.component';
+import { PaymentSuccessComponent } from './components/payment-success/payment-success.component';
+import { ShopLogComponent } from './components/shop-log/shop-log.component';
+import { AllOrdersComponent } from './components/all-orders/all-orders.component';
 
 
 @NgModule({
@@ -65,6 +68,9 @@ DetailsComponent,
 CartComponent,
 OrderComponent,
 PaymentComponent,
+PaymentSuccessComponent,
+ShopLogComponent,
+AllOrdersComponent,
   ],
   imports: [
     BrowserModule,
@@ -88,7 +94,6 @@ PaymentComponent,
     MatSelectModule,
     MatFormFieldModule,
     MatOptionModule
-    
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }

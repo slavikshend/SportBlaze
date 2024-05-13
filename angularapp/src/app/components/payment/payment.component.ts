@@ -54,13 +54,12 @@ export class PaymentComponent implements OnInit {
                       }
                     );
                   }
-                  //this.router.navigate(['confirm']);
+                  localStorage.removeItem('orderId');
+                  this.router.navigate(['paymentsuccess']);
                   console.log('Payment completed:', details);
                 }
               });
             },
-
-
             onError: (error: any) => {
               console.log(error);
             }

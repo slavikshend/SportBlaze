@@ -6,13 +6,14 @@
       <li routerLink="/cabinet/favourites">Закладки</li>
       <ng-container *ngIf="isAdmin">
         <hr>
-        <li><a href="#">Лог магазину</a></li>
+        <li routerLink="/cabinet/shoplog"> Лог магазину</li>
         <li routerLink="/cabinet/brands">Бренди</li>
         <li routerLink="/cabinet/categories">Категорії</li>
         <li routerLink="/cabinet/subcategories">Підкатегорії</li>
         <li routerLink="/cabinet/products">Товари</li>
-        <li><a href="#">Замовлення</a></li>
+        <li routerLink="/cabinet/allorders">Замовлення</li>
         <li><a href="#">Відгуки</a></li>
+        <li><a href="#">Звіт</a></li>
       </ng-container>
     </ul>
   </div>

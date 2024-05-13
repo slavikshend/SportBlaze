@@ -86,7 +86,7 @@ namespace webapi.DAL.Context
         private void LogChanges()
         {
             var entries = ChangeTracker.Entries()
-                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted)
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified || (e.State == EntityState.Deleted && e.Entity.GetType() != typeof(LogLine)))
                 .ToList();
 
             foreach (var entry in entries)
@@ -94,12 +94,19 @@ namespace webapi.DAL.Context
                 var log = new LogLine
                 {
                     TimeStamp = DateTime.Now,
-                    LogLevel = "Info"
+                    LogLevel = "Інформація" 
                 };
 
-                var operation = entry.State.ToString().ToLower();
+                var operation = entry.State == EntityState.Added ? "додано" : "змінено";
                 var entityType = entry.Entity.GetType().Name.ToLower();
                 object entityId = null;
+
+                if (entry.State == EntityState.Deleted)
+                {
+                    log.LogMessage = "Видалено всі журнальні записи"; 
+                    LogLines.Add(log);
+                    return;
+                }
 
                 if (entityType == "user")
                 {
@@ -114,7 +121,7 @@ namespace webapi.DAL.Context
                     entityId = entry.Property("Id").CurrentValue;
                 }
 
-                log.LogMessage = $"The {entityType} with {(entityType == "user" ? "email" : "id")} {entityId} has been {operation}";
+                log.LogMessage = $"Об'єкт типу {entityType} з {(entityType == "user" ? "емейлом" : "ідентифікатором")} {entityId} було {operation}"; // Ukrainian message
 
                 LogLines.Add(log);
             }

@@ -15,5 +15,6 @@ namespace webapi.BLL.Repos.Interfaces
         Task AddPayment(Payment payment);
         Task<Order> GetOrderById(int orderId);
         Task UpdateOrder(Order order);
+        Task<IEnumerable<Order>> GetAllOrders();
     }
 }

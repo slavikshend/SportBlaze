@@ -40,6 +40,9 @@ internal class Program
                 };
             });
         builder.Services.AddSingleton(jwtSettings);
+
+        builder.Services.AddScoped<ILogReportRepo, LogReportRepo>();
+        builder.Services.AddScoped<ILogReportService, LogReportService>();
         builder.Services.AddScoped<IOrderService, OrderService>();
         builder.Services.AddScoped<IOrderRepo, OrderRepo>();
         builder.Services.AddScoped<IFeedbackRepo, FeedbackRepo>();

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using webapi.BLL.Models;
+using webapi.BLL.Repos.Implementations;
 using webapi.BLL.Repos.Interfaces;
 using webapi.BLL.Services.Interfaces;
 using webapi.DAL.Entities.Main;
@@ -46,7 +47,7 @@ namespace webapi.BLL.Services.Implementations
                     Id = method.Id,
                     Name = method.Name
                 };
-                methods2.Add(deliveryMethod); 
+                methods2.Add(deliveryMethod);
             }
             return methods2;
         }
@@ -100,7 +101,7 @@ namespace webapi.BLL.Services.Implementations
                     order.OrderDetails.Add(orderDetail);
                 }
 
-                return await _orderRepo.AddOrder(order); 
+                return await _orderRepo.AddOrder(order);
             }
             catch (Exception ex)
             {
@@ -131,5 +132,58 @@ namespace webapi.BLL.Services.Implementations
             }
         }
 
+        public async Task<IEnumerable<OrderModel>> GetAllOrders()
+        {
+            var orders = await _orderRepo.GetAllOrders();
+            return orders.Select(o => MapToOrderModel(o));
+        }
+
+        private OrderModel MapToOrderModel(Order order)
+        {
+            return new OrderModel
+            {
+                Id = order.Id,
+                UserEmail = order.UserEmail,
+                FirstName = order.User?.FirstName,
+                LastName = order.User?.LastName,
+                PhoneNumber = order.User?.Phone,
+                DeliveryAddress = order.DeliveryAddress,
+                DeliveryName = order.DeliveryMethod?.Name,
+                PaymentName = order.Payment?.PaymentMethod?.Name,
+                Status = order.OrderStatus?.Name,
+                OrderDate = order.OrderDate,
+                IsPaymentSuccessfull = order.Payment?.isCompleted ?? false,
+                Total = order.Total,
+                OrderItems = order.OrderDetails?.Select(od => new OrderItemModel
+                {
+                    Name = od.Product != null ? od.Product.Name : "", // Null check for Product
+                    Quantity = od.Quantity,
+                    Price = od.Product != null ? od.Product.Price * (od.Product.Discount / 100) : 0, // Null check for Product and Discount
+                }).ToList()
+            };
+        }
+        public async Task<bool> ChangeOrderStatus(int orderId, int statusId)
+        {
+            try
+            {
+                Order order = await _orderRepo.GetOrderById(orderId);
+
+                if (order == null)
+                {
+                    return false; 
+                }
+
+                order.OrderStatusId = statusId;
+                await _orderRepo.UpdateOrder(order);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error changing order status: {ex.Message}");
+                return false;
+            }
+        }
     }
+
 }

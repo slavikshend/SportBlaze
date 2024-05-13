@@ -1,0 +1,50 @@
+<div class="order-container">
+  <div class="table-container">
+    <input style="margin-bottom:15px;" type="text" [(ngModel)]="searchQuery" (input)="updateSearchQuery($event)" placeholder="Пошук">
+    <table>
+      <thead>
+        <tr>
+          <th (click)="toggleSortDirection()">
+            Номер замовлення
+            <span class="sort-indicator" [ngClass]="{'asc': sortDirection === 'asc', 'desc': sortDirection === 'desc'}"></span>
+          </th>
+          <th style="max-width: 300px;">
+            Статус замовлення
+          </th>
+          <th>Дата замовлення</th>
+          <th>Сума</th>
+          <th>Клієнт</th>
+          <th>Адреса доставки</th>
+          <th>Метод доставки</th>
+          <th>Метод оплати</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders">
+          <td>{{ order.id }}</td>
+          <td style="max-width: 300px;">
+            <mat-form-field appearance="fill">
+              <mat-label>Статус замовлення</mat-label>
+              <mat-select [(ngModel)]="order.status" (selectionChange)="updateOrderStatus(order, $event.value)">
+                <mat-option *ngFor="let status of orderStatuses; let i = index" [value]="i + 1">{{ status }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </td>
+          <td>{{ order.orderDate | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ order.total }}</td>
+          <td>{{ order.firstName }} {{ order.lastName }}</td>
+          <td>{{ order.deliveryAddress }}</td>
+          <td>{{ order.deliveryName }}</td>
+          <td>{{ order.paymentName }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <mat-paginator [length]="totalItems"
+                   [pageSize]="pageSize"
+                   [pageIndex]="pageIndex"
+                   [pageSizeOptions]="pageSizeOptions"
+                   (page)="handlePageEvent($event)">
+    </mat-paginator>
+  </div>
+</div>

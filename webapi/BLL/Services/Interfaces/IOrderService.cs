@@ -11,5 +11,7 @@ namespace webapi.BLL.Services.Interfaces
         Task<IEnumerable<DeliveryModel>> GetDeliveryMethods();
         Task<int> AddOrder(OrderRequestModel orderRequest);
         Task<bool> AddPayment(int orderId);
+        Task<IEnumerable<OrderModel>> GetAllOrders();
+        Task<bool> ChangeOrderStatus(int orderId, int statusId);
     }
 }

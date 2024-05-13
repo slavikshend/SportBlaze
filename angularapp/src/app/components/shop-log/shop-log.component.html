@@ -1,0 +1,13 @@
+<div class="log-container">
+  <h2>Лог інтернет-магазину</h2>
+  <button class="clear-button" (click)="clearLogs()">Очистити</button>
+  <div *ngIf="logLines.length > 0; else noLogs">
+    <div class="log-line" *ngFor="let logLine of logLines">
+      <p>{{ logLine.logMessage }}</p>
+      <p> {{ logLine.timeStamp | date: 'medium' }}</p>
+    </div>
+  </div>
+  <ng-template #noLogs>
+    <p>Немає повідомлень</p>
+  </ng-template>
+</div>

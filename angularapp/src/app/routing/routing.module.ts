@@ -12,6 +12,9 @@ import { FavouritesComponent } from '../components/favourites/favourites.compone
 import { DetailsComponent } from '../components/details/details.component';
 import { OrderComponent } from '../components/order/order.component';
 import { PaymentComponent } from '../components/payment/payment.component';
+import { PaymentSuccessComponent } from '../components/payment-success/payment-success.component';
+import { ShopLogComponent } from '../components/shop-log/shop-log.component';
+import { AllOrdersComponent } from '../components/all-orders/all-orders.component';
 
 const routes: Routes = [
   { path: '', component: BodyComponent },
@@ -26,11 +29,14 @@ const routes: Routes = [
       { path: 'subcategories', component: SubCategoriesComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'favourites', component: FavouritesComponent },
+      { path: 'shoplog', component: ShopLogComponent },
+      { path: 'allorders', component: AllOrdersComponent },
     ]
   },
   { path: 'products/:id', component: DetailsComponent },
   { path: 'payment', component: PaymentComponent },
   { path: 'makeorder', component: OrderComponent },
+  { path: 'paymentsuccess', component: PaymentSuccessComponent },
   { path: '**', component: NotfoundComponent },
 ];
 

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PaymentMethod } from '../../interfaces/payment-method';
-import { DeliveryMethod } from '../../interfaces/delivery-method';
 import { Order } from '../../interfaces/order';
+import { OrderModel } from '../../interfaces/order-model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +12,14 @@ export class OrderService {
 
   constructor(private http: HttpClient) { }
 
-  getPaymentMethods(): Observable<PaymentMethod[]> {
+  getPaymentMethods(): Observable<any> {
     const url = `${this.baseUrl}/payment-methods`;
-    return this.http.get<PaymentMethod[]>(url);
+    return this.http.get<any>(url);
   }
 
-  getDeliveryMethods(): Observable<DeliveryMethod[]> {
+  getDeliveryMethods(): Observable<any> {
     const url = `${this.baseUrl}/delivery-methods`;
-    return this.http.get<DeliveryMethod[]>(url);
+    return this.http.get<any>(url);
   }
 
   addOrder(order: Order): Observable<any> {
@@ -29,6 +28,15 @@ export class OrderService {
 
   addPayment(orderId: number): Observable<any> {
     const url = `${this.baseUrl}/${orderId}/payment`;
-    return this.http.post<any>(url, null); 
+    return this.http.post<any>(url, null);
+  }
+
+  getAllOrders(): Observable<OrderModel[]> {
+    return this.http.get<OrderModel[]>(this.baseUrl);
+  }
+
+  ChangeOrderStatus(orderId: number, statusId: number): Observable<any> {
+    const url = `${this.baseUrl}/${orderId}/status`;
+    return this.http.put<any>(url, { statusId });
   }
 }
