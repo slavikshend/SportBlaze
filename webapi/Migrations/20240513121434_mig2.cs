@@ -5,7 +5,7 @@
 namespace webapi.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangedPasswordAdmin : Migration
+    public partial class mig2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,7 @@ namespace webapi.Migrations
                 keyColumn: "email",
                 keyValue: "admin@example.com",
                 column: "hashed_password",
-                value: "2ab9f9c0357ff177048e0f0d3ae2129982f279d1d90b0900b5bd3fb73f9bb00d");
+                value: "eea64d928eefc66824117fd49f28463a1a4da3b5c3e170b6cd9159afdafaee56");
         }
 
         /// <inheritdoc />
@@ -26,7 +26,7 @@ namespace webapi.Migrations
                 keyColumn: "email",
                 keyValue: "admin@example.com",
                 column: "hashed_password",
-                value: "3618124d4ffcf5e6625095cbcaf7ce572f406e92c01850f9be488881768abb70");
+                value: "ed647ee632f13df6c65f9e47929f13cfc35069bbaa70e50c157bac04575c4e37");
         }
     }
 }

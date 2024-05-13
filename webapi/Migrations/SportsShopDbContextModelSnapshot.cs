@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using webapi.DAL.Context;
@@ -12,11 +11,9 @@ using webapi.DAL.Context;
 namespace webapi.Migrations
 {
     [DbContext(typeof(SportsShopDbContext))]
-    [Migration("20240408123808_AddedAdminSalt")]
-    partial class AddedAdminSalt
+    partial class SportsShopDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,16 +103,12 @@ namespace webapi.Migrations
                         .HasColumnName("order_id");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("product_id");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer")
                         .HasColumnName("quantity");
-
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("user_email");
 
                     b.HasKey("Id");
 
@@ -139,24 +132,24 @@ namespace webapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("order_id");
 
-                    b.Property<decimal>("PaymentAmount")
-                        .HasColumnType("numeric")
-                        .HasColumnName("payment_amount");
-
                     b.Property<DateTimeOffset>("PaymentDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("payment_date");
 
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("user_email");
+                    b.Property<int>("PaymentMethodId")
+                        .HasColumnType("integer")
+                        .HasColumnName("payment_method_id");
+
+                    b.Property<bool>("isCompleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_completed");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .IsUnique();
 
-                    b.HasIndex("UserEmail");
+                    b.HasIndex("PaymentMethodId");
 
                     b.ToTable("payments");
                 });
@@ -194,7 +187,7 @@ namespace webapi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("image");
@@ -221,7 +214,7 @@ namespace webapi.Migrations
                     b.Property<string>("LogLevel")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("loglevel");
+                        .HasColumnName("log_level");
 
                     b.Property<string>("LogMessage")
                         .IsRequired()
@@ -230,7 +223,7 @@ namespace webapi.Migrations
 
                     b.Property<DateTimeOffset>("TimeStamp")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
+                        .HasColumnName("log_timestamp");
 
                     b.HasKey("Id");
 
@@ -263,10 +256,6 @@ namespace webapi.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("order_status_id");
 
-                    b.Property<int>("PaymentMethodId")
-                        .HasColumnType("integer")
-                        .HasColumnName("payment_method_id");
-
                     b.Property<decimal>("Total")
                         .HasColumnType("numeric")
                         .HasColumnName("total");
@@ -281,8 +270,6 @@ namespace webapi.Migrations
                     b.HasIndex("DeliveryMethodId");
 
                     b.HasIndex("OrderStatusId");
-
-                    b.HasIndex("PaymentMethodId");
 
                     b.HasIndex("UserEmail");
 
@@ -426,10 +413,10 @@ namespace webapi.Migrations
                         {
                             Email = "admin@example.com",
                             FirstName = "Admin",
-                            HashedPassword = "3618124d4ffcf5e6625095cbcaf7ce572f406e92c01850f9be488881768abb70",
+                            HashedPassword = "eea64d928eefc66824117fd49f28463a1a4da3b5c3e170b6cd9159afdafaee56",
                             LastName = "User",
                             RoleId = 1,
-                            Salt = "adminsalt"
+                            Salt = "yuz1xllqhl7jcudb"
                         });
                 });
 
@@ -689,20 +676,20 @@ namespace webapi.Migrations
             modelBuilder.Entity("webapi.DAL.Entities.MN.Payment", b =>
                 {
                     b.HasOne("webapi.DAL.Entities.Main.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
+                        .WithOne("Payment")
+                        .HasForeignKey("webapi.DAL.Entities.MN.Payment", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("webapi.DAL.Entities.Main.User", "User")
+                    b.HasOne("webapi.DAL.Entities.Support.PaymentMethod", "PaymentMethod")
                         .WithMany("Payments")
-                        .HasForeignKey("UserEmail")
+                        .HasForeignKey("PaymentMethodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
 
-                    b.Navigation("User");
+                    b.Navigation("PaymentMethod");
                 });
 
             modelBuilder.Entity("webapi.DAL.Entities.Main.Order", b =>
@@ -719,12 +706,6 @@ namespace webapi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("webapi.DAL.Entities.Support.PaymentMethod", "PaymentMethod")
-                        .WithMany()
-                        .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("webapi.DAL.Entities.Main.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserEmail")
@@ -735,15 +716,13 @@ namespace webapi.Migrations
 
                     b.Navigation("OrderStatus");
 
-                    b.Navigation("PaymentMethod");
-
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("webapi.DAL.Entities.Main.Product", b =>
                 {
                     b.HasOne("webapi.DAL.Entities.Main.Brand", "Brand")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -792,6 +771,11 @@ namespace webapi.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("webapi.DAL.Entities.Main.Brand", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("webapi.DAL.Entities.Main.Category", b =>
                 {
                     b.Navigation("SubCategories");
@@ -800,6 +784,9 @@ namespace webapi.Migrations
             modelBuilder.Entity("webapi.DAL.Entities.Main.Order", b =>
                 {
                     b.Navigation("OrderDetails");
+
+                    b.Navigation("Payment")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("webapi.DAL.Entities.Main.Product", b =>
@@ -820,7 +807,10 @@ namespace webapi.Migrations
                     b.Navigation("FeedBacks");
 
                     b.Navigation("Orders");
+                });
 
+            modelBuilder.Entity("webapi.DAL.Entities.Support.PaymentMethod", b =>
+                {
                     b.Navigation("Payments");
                 });
 #pragma warning restore 612, 618

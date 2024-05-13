@@ -12,8 +12,8 @@ using webapi.DAL.Context;
 namespace webapi.Migrations
 {
     [DbContext(typeof(SportsShopDbContext))]
-    [Migration("20240512135446_wregwwe")]
-    partial class wregwwe
+    [Migration("20240513121137_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

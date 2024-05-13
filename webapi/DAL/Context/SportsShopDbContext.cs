@@ -70,7 +70,7 @@ namespace webapi.DAL.Context
             Email = "admin@example.com",
             FirstName = "Admin",
             LastName = "User",
-            HashedPassword = "ed647ee632f13df6c65f9e47929f13cfc35069bbaa70e50c157bac04575c4e37",
+            HashedPassword = "eea64d928eefc66824117fd49f28463a1a4da3b5c3e170b6cd9159afdafaee56",
             RoleId = 1,
             Salt = "yuz1xllqhl7jcudb"
         }

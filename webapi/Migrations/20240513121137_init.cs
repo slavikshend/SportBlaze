@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace webapi.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,8 +63,8 @@ namespace webapi.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     logmessage = table.Column<string>(type: "text", nullable: false),
-                    timestamp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    loglevel = table.Column<string>(type: "text", nullable: false)
+                    log_timestamp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    log_level = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,22 +98,16 @@ namespace webapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "users",
+                name: "roles",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    firstname = table.Column<string>(type: "text", nullable: false),
-                    lastname = table.Column<string>(type: "text", nullable: false),
-                    email = table.Column<string>(type: "text", nullable: false),
-                    phone = table.Column<string>(type: "text", nullable: false),
-                    password = table.Column<string>(type: "text", nullable: false),
-                    address = table.Column<string>(type: "text", nullable: false),
-                    isregistered = table.Column<bool>(type: "boolean", nullable: false)
+                    name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_users", x => x.id);
+                    table.PrimaryKey("PK_roles", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -139,44 +133,26 @@ namespace webapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "orders",
+                name: "users",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    user_id = table.Column<int>(type: "integer", nullable: false),
-                    order_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    payment_method_id = table.Column<int>(type: "integer", nullable: false),
-                    delivery_method_id = table.Column<int>(type: "integer", nullable: false),
-                    delivery_address = table.Column<string>(type: "text", nullable: false),
-                    order_status_id = table.Column<int>(type: "integer", nullable: false),
-                    total = table.Column<decimal>(type: "numeric", nullable: false)
+                    email = table.Column<string>(type: "text", nullable: false),
+                    firstname = table.Column<string>(type: "text", nullable: true),
+                    lastname = table.Column<string>(type: "text", nullable: true),
+                    hashed_password = table.Column<string>(type: "text", nullable: true),
+                    salt = table.Column<string>(type: "text", nullable: true),
+                    phone = table.Column<string>(type: "text", nullable: true),
+                    city = table.Column<string>(type: "text", nullable: true),
+                    role_id = table.Column<int>(type: "integer", nullable: false),
+                    address = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_orders", x => x.id);
+                    table.PrimaryKey("PK_users", x => x.email);
                     table.ForeignKey(
-                        name: "FK_orders_delivery_methods_delivery_method_id",
-                        column: x => x.delivery_method_id,
-                        principalTable: "delivery_methods",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_orders_order_status_order_status_id",
-                        column: x => x.order_status_id,
-                        principalTable: "order_status",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_orders_payment_methods_payment_method_id",
-                        column: x => x.payment_method_id,
-                        principalTable: "payment_methods",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_orders_users_user_id",
-                        column: x => x.user_id,
-                        principalTable: "users",
+                        name: "FK_users_roles_role_id",
+                        column: x => x.role_id,
+                        principalTable: "roles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -190,6 +166,7 @@ namespace webapi.Migrations
                     name = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     image = table.Column<string>(type: "text", nullable: false),
+                    quantity = table.Column<int>(type: "integer", nullable: false),
                     price = table.Column<decimal>(type: "numeric", nullable: false),
                     discount = table.Column<decimal>(type: "numeric", nullable: false),
                     brand_id = table.Column<int>(type: "integer", nullable: false),
@@ -213,30 +190,38 @@ namespace webapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "payments",
+                name: "orders",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    user_id = table.Column<int>(type: "integer", nullable: false),
-                    order_id = table.Column<int>(type: "integer", nullable: false),
-                    payment_amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    payment_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    user_email = table.Column<string>(type: "text", nullable: false),
+                    order_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    delivery_method_id = table.Column<int>(type: "integer", nullable: false),
+                    delivery_address = table.Column<string>(type: "text", nullable: false),
+                    order_status_id = table.Column<int>(type: "integer", nullable: false),
+                    total = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_payments", x => x.id);
+                    table.PrimaryKey("PK_orders", x => x.id);
                     table.ForeignKey(
-                        name: "FK_payments_orders_order_id",
-                        column: x => x.order_id,
-                        principalTable: "orders",
+                        name: "FK_orders_delivery_methods_delivery_method_id",
+                        column: x => x.delivery_method_id,
+                        principalTable: "delivery_methods",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_payments_users_user_id",
-                        column: x => x.user_id,
-                        principalTable: "users",
+                        name: "FK_orders_order_status_order_status_id",
+                        column: x => x.order_status_id,
+                        principalTable: "order_status",
                         principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_orders_users_user_email",
+                        column: x => x.user_email,
+                        principalTable: "users",
+                        principalColumn: "email",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -246,7 +231,7 @@ namespace webapi.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    user_email = table.Column<string>(type: "text", nullable: false),
                     product_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -259,10 +244,10 @@ namespace webapi.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_favourites_users_user_id",
-                        column: x => x.user_id,
+                        name: "FK_favourites_users_user_email",
+                        column: x => x.user_email,
                         principalTable: "users",
-                        principalColumn: "id",
+                        principalColumn: "email",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -293,9 +278,11 @@ namespace webapi.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    user_email = table.Column<string>(type: "text", nullable: false),
                     product_id = table.Column<int>(type: "integer", nullable: false),
-                    comment = table.Column<string>(type: "text", nullable: false)
+                    rating = table.Column<int>(type: "integer", nullable: false),
+                    comment = table.Column<string>(type: "text", nullable: false),
+                    date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -307,10 +294,10 @@ namespace webapi.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_feedbacks_users_user_id",
-                        column: x => x.user_id,
+                        name: "FK_feedbacks_users_user_email",
+                        column: x => x.user_email,
                         principalTable: "users",
-                        principalColumn: "id",
+                        principalColumn: "email",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -337,6 +324,34 @@ namespace webapi.Migrations
                         name: "FK_order_details_products_product_id",
                         column: x => x.product_id,
                         principalTable: "products",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "payments",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    order_id = table.Column<int>(type: "integer", nullable: false),
+                    payment_method_id = table.Column<int>(type: "integer", nullable: false),
+                    payment_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    is_completed = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_payments", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_payments_orders_order_id",
+                        column: x => x.order_id,
+                        principalTable: "orders",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_payments_payment_methods_payment_method_id",
+                        column: x => x.payment_method_id,
+                        principalTable: "payment_methods",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -374,15 +389,30 @@ namespace webapi.Migrations
                     { 2, "Оплата онлайн" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "roles",
+                columns: new[] { "id", "name" },
+                values: new object[,]
+                {
+                    { 1, "Admin" },
+                    { 2, "RegisteredUser" },
+                    { 3, "UnregisteredUser" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "users",
+                columns: new[] { "email", "address", "city", "firstname", "hashed_password", "lastname", "phone", "role_id", "salt" },
+                values: new object[] { "admin@example.com", null, null, "Admin", "ed647ee632f13df6c65f9e47929f13cfc35069bbaa70e50c157bac04575c4e37", "User", null, 1, "yuz1xllqhl7jcudb" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_favourites_product_id",
                 table: "favourites",
                 column: "product_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_favourites_user_id",
+                name: "IX_favourites_user_email",
                 table: "favourites",
-                column: "user_id");
+                column: "user_email");
 
             migrationBuilder.CreateIndex(
                 name: "IX_features_product_id",
@@ -395,9 +425,9 @@ namespace webapi.Migrations
                 column: "product_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_feedbacks_user_id",
+                name: "IX_feedbacks_user_email",
                 table: "feedbacks",
-                column: "user_id");
+                column: "user_email");
 
             migrationBuilder.CreateIndex(
                 name: "IX_order_details_order_id",
@@ -420,24 +450,20 @@ namespace webapi.Migrations
                 column: "order_status_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_orders_payment_method_id",
+                name: "IX_orders_user_email",
                 table: "orders",
-                column: "payment_method_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_orders_user_id",
-                table: "orders",
-                column: "user_id");
+                column: "user_email");
 
             migrationBuilder.CreateIndex(
                 name: "IX_payments_order_id",
                 table: "payments",
-                column: "order_id");
+                column: "order_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_payments_user_id",
+                name: "IX_payments_payment_method_id",
                 table: "payments",
-                column: "user_id");
+                column: "payment_method_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_products_brand_id",
@@ -453,6 +479,11 @@ namespace webapi.Migrations
                 name: "IX_subcategories_category_id",
                 table: "subcategories",
                 column: "category_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_users_role_id",
+                table: "users",
+                column: "role_id");
         }
 
         /// <inheritdoc />
@@ -483,6 +514,9 @@ namespace webapi.Migrations
                 name: "orders");
 
             migrationBuilder.DropTable(
+                name: "payment_methods");
+
+            migrationBuilder.DropTable(
                 name: "brands");
 
             migrationBuilder.DropTable(
@@ -495,13 +529,13 @@ namespace webapi.Migrations
                 name: "order_status");
 
             migrationBuilder.DropTable(
-                name: "payment_methods");
-
-            migrationBuilder.DropTable(
                 name: "users");
 
             migrationBuilder.DropTable(
                 name: "categories");
+
+            migrationBuilder.DropTable(
+                name: "roles");
         }
     }
 }
