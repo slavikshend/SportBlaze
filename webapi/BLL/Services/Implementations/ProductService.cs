@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using webapi.BLL.Helpers;
 using webapi.BLL.Models;
+using webapi.BLL.Repos.Implementations;
 using webapi.BLL.Repos.Interfaces;
 using webapi.BLL.Services.Interfaces;
 using webapi.DAL.Entities.Main;
@@ -13,11 +15,15 @@ namespace webapi.BLL.Services.Implementations
     {
         private readonly IProductRepo _productRepo;
         private readonly IMapper _mapper;
+        private readonly IUserRepo _userRepo;
+        private readonly RecommendationSystem _recommendationSystem;
 
-        public ProductService(IProductRepo productRepo, IMapper mapper)
+        public ProductService(IProductRepo productRepo, IMapper mapper, IUserRepo userRepo, RecommendationSystem recommendationSystem)
         {
-            _productRepo = productRepo ?? throw new ArgumentNullException(nameof(productRepo));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _productRepo = productRepo ?? throw new ArgumentNullException(nameof(productRepo));
+            _userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
+            _recommendationSystem = recommendationSystem ?? throw new ArgumentNullException(nameof(recommendationSystem));
         }
 
         public async Task<IEnumerable<ProductModel>> GetAllAsync()
@@ -90,7 +96,17 @@ namespace webapi.BLL.Services.Implementations
             var products = await _productRepo.SearchProductsByNameAsync(name);
             return _mapper.Map<IEnumerable<SimplifiedProductModel>>(products);
         }
+        public async Task<IEnumerable<ProductModel>> GetPersonalizedRecommendationsAsync(string userEmail)
+        {
+            var targetUser = await _userRepo.GetRegisteredUser(userEmail);
+            if (targetUser == null)
+            {
+                throw new ArgumentException("User not found");
+            }
 
+            var recommendations = await _recommendationSystem.GetRecommendations(targetUser.Email);
+            return _mapper.Map<IEnumerable<ProductModel>>(recommendations);
+        }
 
     }
 }

@@ -9,7 +9,6 @@ namespace webapi.BLL.Repos.Interfaces
         public Task<User> GetRegisteredUser(string email);
         public Task<User> UpdateUser(User user);
         public Task<User> AddUser(User user);
-
-
+        public Task<IEnumerable<User>> GetAllRegisteredUsers();
     }
 }

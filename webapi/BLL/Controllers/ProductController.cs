@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using webapi.BLL.Helpers;
 using webapi.BLL.Models;
 using webapi.BLL.Services.Interfaces;
 
@@ -103,6 +104,19 @@ namespace webapi.BLL.Controllers
         {
             var products = await _productService.SearchProductsByNameAsync(name);
             return Ok(products);
+        }
+
+        [HttpGet("personalized-recommendations")]
+        public async Task<ActionResult<IEnumerable<ProductModel>>> GetPersonalizedRecommendations()
+        {
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email not found in claims.");
+            }
+
+            var recommendations = await _productService.GetPersonalizedRecommendationsAsync(email);
+            return Ok(recommendations);
         }
     }
 

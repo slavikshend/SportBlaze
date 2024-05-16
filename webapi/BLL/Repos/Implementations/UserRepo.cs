@@ -49,5 +49,18 @@ namespace webapi.BLL.Repos.Implementations
                 return user;
             }
         }
+       public async Task<IEnumerable<User>> GetAllRegisteredUsers()
+{
+    var registeredUsers = await _context.Users.AsNoTracking()
+        .Include(u => u.Role)
+        .Include(u => u.Favourites)
+        .ThenInclude(p => p.Product)
+        .Where(u => u.Role.Name != "UnregisteredUser")
+        .ToListAsync();
+
+    return registeredUsers;
+}
+
+
     }
 }

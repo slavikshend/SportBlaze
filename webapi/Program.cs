@@ -12,6 +12,7 @@ using webapi.BLL.Services.Interfaces;
 using webapi.DAL.Context;
 using webapi.DAL.Entities.Main;
 using AutoMapper;
+using webapi.BLL.Helpers;
 
 internal class Program
 {
@@ -59,6 +60,7 @@ internal class Program
         builder.Services.AddScoped<ICRUDService<BrandModel>, BrandService>();
         builder.Services.AddScoped<ICRUDRepo<Category>, CategoryRepo>();
         builder.Services.AddScoped<ICRUDService<CategoryModel>, CategoryService>();
+        builder.Services.AddScoped<RecommendationSystem>();
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAngularApp",

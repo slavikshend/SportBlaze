@@ -326,3 +326,16 @@ input[type="file"] {
 th:nth-child(9), td:nth-child(9) {
   max-width: 300px;
 }
+
+td.description-cell {
+  max-width: 200px; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+  td.description-cell:hover {
+    overflow: visible;
+    text-overflow: unset;
+    white-space: normal;
+  }
