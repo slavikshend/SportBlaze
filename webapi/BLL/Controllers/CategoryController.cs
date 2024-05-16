@@ -12,9 +12,9 @@ namespace webapi.BLL.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICRUDService<CategoryModel> _categoryService;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICRUDService<CategoryModel> categoryService)
+        public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
@@ -23,6 +23,14 @@ namespace webapi.BLL.Controllers
         public async Task<ActionResult<IEnumerable<CategoryModel>>> GetAll()
         {
             var categories = await _categoryService.GetAllAsync();
+            return Ok(categories);
+        }
+
+        [HttpGet("catalog")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<CategoryModel1>>> GetAllCategoriesAsync()
+        {
+            var categories = await _categoryService.GetAllCategoriesAsync();
             return Ok(categories);
         }
 

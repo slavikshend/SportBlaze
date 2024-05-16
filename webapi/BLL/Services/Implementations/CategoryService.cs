@@ -6,7 +6,7 @@ using webapi.DAL.Entities.Main;
 
 namespace webapi.BLL.Services.Implementations
 {
-    public class CategoryService : ICRUDService<CategoryModel>
+    public class CategoryService : ICategoryService
     {
         private readonly ICRUDRepo<Category> _categoryRepo;
         private readonly IMapper _mapper;
@@ -21,6 +21,12 @@ namespace webapi.BLL.Services.Implementations
         {
             var categories = await _categoryRepo.GetAllAsync();
             return _mapper.Map<IEnumerable<CategoryModel>>(categories);
+        }
+
+        public async Task<IEnumerable<CategoryModel1>> GetAllCategoriesAsync()
+        {
+            var categories = await _categoryRepo.GetAllAsync();
+            return _mapper.Map<IEnumerable<CategoryModel1>>(categories);
         }
 
         public async Task<CategoryModel> GetByIdAsync(int id)
@@ -42,7 +48,6 @@ namespace webapi.BLL.Services.Implementations
                 return null;
             }
         }   
-
         public async Task<CategoryModel> UpdateAsync(CategoryModel entity)
         {
             try

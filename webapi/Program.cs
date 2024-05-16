@@ -59,7 +59,7 @@ internal class Program
         builder.Services.AddScoped<ICRUDRepo<Brand>, BrandRepo>();
         builder.Services.AddScoped<ICRUDService<BrandModel>, BrandService>();
         builder.Services.AddScoped<ICRUDRepo<Category>, CategoryRepo>();
-        builder.Services.AddScoped<ICRUDService<CategoryModel>, CategoryService>();
+        builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<RecommendationSystem>();
         builder.Services.AddCors(options =>
         {

@@ -9,6 +9,7 @@ import { SimplifiedProduct } from '../../interfaces/simplified-product';
 import { CartItem } from '../../interfaces/cart-item';
 import { Router } from '@angular/router';
 import { SearchService } from '../../services/search/search.service';
+import { SubcategoryLoadService } from '../../services/subcategory-load/subcategory-load.service';
 
 @Component({
   selector: 'app-body',
@@ -26,7 +27,8 @@ export class BodyComponent {
     private favouritesService: FavouritesService,
     private dialog: MatDialog,
     private cartService: CartService,
-    private router: Router
+    private router: Router,
+    private subcategoryLoadService: SubcategoryLoadService
   ) {
   }
 
@@ -37,9 +39,23 @@ export class BodyComponent {
     } else {
       this.loadSpecialOfferProductsAnon();
     }
+
+    this.subcategoryLoadService.selectedSubcategory$.subscribe((subcategory: string) => {
+      if (subcategory) {
+        this.loadProductsBySubcategory(subcategory);
+      } else {
+        this.loadSpecialOfferProducts();
+      }
+    });
     this.searchService.searchQuery$.subscribe((query: string) => {
       console.log('Received search query:', query);
       this.searchProducts(query);
+    });
+  }
+
+  loadProductsBySubcategory(subcategory: string): void {
+    this.productService.getProductsBySubcategory(subcategory).subscribe((products: any[]) => {
+      this.specialOfferProducts = products;
     });
   }
 

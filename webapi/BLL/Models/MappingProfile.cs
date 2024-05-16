@@ -8,6 +8,10 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        CreateMap<SubCategory, SubCategoryModel1>().ReverseMap();
+        CreateMap<Category, CategoryModel1>().ReverseMap();
+
+
         CreateMap<BrandModel, Brand>().ReverseMap();
         CreateMap<CategoryModel, Category>().ReverseMap();
         CreateMap<SubCategoryModel, SubCategory>().ReverseMap()

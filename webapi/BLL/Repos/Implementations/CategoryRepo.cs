@@ -41,7 +41,7 @@ namespace webapi.BLL.Repos.Implementations
 
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories.Include(c => c.SubCategories).ToListAsync();
         }
 
         public async Task<Category> GetByIdAsync(int id)

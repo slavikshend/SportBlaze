@@ -2,7 +2,19 @@
   <div class="logo">
     <a href="#">SportBlaze</a>
     <a href="#"><mat-icon class="fire-icon">whatshot</mat-icon></a>
-</div>
+  </div>
+      <mat-icon style="color: white; position:absolute; left: 185px; top: 24px;" (click)="toggleCatalog()">menu</mat-icon>
+  <div class="sidebar" *ngIf="showCatalog">
+    <div class="sidebar-header">Каталог</div>
+    <ul class="catalog">
+      <li *ngFor="let category of categories" class="category">
+        <button class="category-name" (click)="toggleSubcategories($event)">{{ category.name }} <i class="fa fa-caret-down"></i></button>
+        <ul *ngIf="category.subCategories" class="subcategory-list">
+          <li *ngFor="let subcategory of category.subCategories" class="subcategory" (click)="loadProducts(subcategory); showCatalog = false">{{ subcategory.name }}</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
   <div class="search">
     <input type="text" [(ngModel)]="searchValue" (input)="searchProducts()" placeholder="Пошук...">
     <button (click)="searchProducts()" class="search-icon">
@@ -25,4 +37,6 @@
   <div (click)="toggleLoginMenu()" routerLink="/cabinet">Особистий кабінет</div>
   <div (click)="logout()">Вихід з акаунту</div>
 </div>
+
+
 <app-cart *ngIf="showCart"></app-cart>
