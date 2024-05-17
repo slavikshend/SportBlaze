@@ -10,7 +10,7 @@
       <li *ngFor="let category of categories" class="category">
         <button class="category-name" (click)="toggleSubcategories($event)">{{ category.name }} <i class="fa fa-caret-down"></i></button>
         <ul *ngIf="category.subCategories" class="subcategory-list">
-          <li *ngFor="let subcategory of category.subCategories" class="subcategory" (click)="loadProducts(subcategory); showCatalog = false">{{ subcategory.name }}</li>
+          <li *ngFor="let subcategory of category.subCategories" class="subcategory" (click)="loadProducts(subcategory.name); showCatalog = false">{{ subcategory.name }}</li>
         </ul>
       </li>
     </ul>

@@ -8,6 +8,7 @@ import { ProductService } from '../../services/product/product.service';
 import { SearchService } from '../../services/search/search.service';
 import { Category, CategoryModel1 } from '../../interfaces/category';
 import { CategoryService } from '../../services/category/category.service';
+import { SubcategoryLoadService } from '../../services/subcategory-load/subcategory-load.service';
 
 @Component({
   selector: 'app-navbar',
@@ -23,7 +24,7 @@ export class NavbarComponent {
   searchValue: string = '';
   showCatalog: boolean = false;
   categories: CategoryModel1[] = []; 
-  constructor(private searchService: SearchService, private dialog: MatDialog, private router: Router, private cartService: CartService, private productService: ProductService, private categoryService : CategoryService) { }
+  constructor(private searchService: SearchService, private dialog: MatDialog, private router: Router, private cartService: CartService, private productService: ProductService, private categoryService: CategoryService, private subcategoryLoadService: SubcategoryLoadService) { }
 
   ngOnInit(): void {
     this.showLoginMenu = false;

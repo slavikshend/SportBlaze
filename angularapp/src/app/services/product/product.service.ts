@@ -53,4 +53,8 @@ export class ProductService {
   loadProductsBySubcategory(subcategory: string): Observable<SimplifiedProduct[]> {
     return this.http.get<SimplifiedProduct[]>(`${this.apiUrl}/subcategory?subcategory=${subcategory}`);
   }
+
+  getPersonalizedRecommendations(): Observable<SimplifiedProduct[]> {
+    return this.http.get<SimplifiedProduct[]>(`${this.apiUrl}/personalized-recommendations`);
+  }
 }

@@ -50,14 +50,20 @@ namespace webapi.BLL.Helpers
 
         private double CalculateSimilarity(User targetUser, User otherUser)
         {
-            var targetSet = targetUser.Favourites.Select(fav => fav.ProductId).ToList();
-            var otherSet = otherUser.Favourites.Select(fav => fav.ProductId).ToList();
+            var targetSet = targetUser.Favourites?.Select(fav => fav.ProductId).ToList() ?? new List<int>();
+            var otherSet = otherUser.Favourites?.Select(fav => fav.ProductId).ToList() ?? new List<int>();
 
             var intersection = targetSet.Intersect(otherSet).Count();
             var union = targetSet.Union(otherSet).Count();
 
+            if (union == 0)
+            {
+                return 0; 
+            }
+
             return (double)intersection / union;
         }
+
 
         private List<User> SelectNeighborhood(Dictionary<User, double> similarityScores)
         {
@@ -66,21 +72,61 @@ namespace webapi.BLL.Helpers
         }
 
         private List<Product> GenerateRecommendations(User targetUser, List<User> neighborhood, int maxRecommendations)
+{
+    var recommendations = new List<Product>();
+
+    // Collect all products liked by users in the neighborhood
+    foreach (var user in neighborhood)
+    {
+        if (user.Favourites != null)
         {
-            var recommendations = new List<Product>();
-
-            foreach (var user in neighborhood)
+            var userFavorites = user.Favourites.Select(fav => fav.Product).ToList();
+            recommendations.AddRange(userFavorites);
+            Console.WriteLine($"Added products liked by user {user.Email} to recommendations:");
+            foreach(var fav in userFavorites)
             {
-                var userFavorites = user.Favourites.Select(fav => fav.Product).ToList();
-                recommendations.AddRange(userFavorites);
+                Console.WriteLine($"\tProduct ID: {fav.Id}, Name: {fav.Name}");
             }
-
-            recommendations = recommendations.Where(product => !targetUser.Favourites.Any(fav => fav.ProductId == product.Id))
-                                             .Distinct()
-                                             .Take(maxRecommendations)
-                                             .ToList();
-            return recommendations;
         }
+    }
+
+    // Filter out products that the target user has already liked
+    var targetUserFavoriteIds = targetUser.Favourites?.Select(fav => fav.ProductId).ToList() ?? new List<int>();
+    Console.WriteLine("Target user's liked product IDs:");
+    if (targetUserFavoriteIds != null)
+    {
+        foreach(var id in targetUserFavoriteIds)
+        {
+            Console.WriteLine($"\t{ id }");
+        }
+    }
+    else
+    {
+        Console.WriteLine("\tNo liked products found for the target user.");
+    }
+    recommendations = recommendations.Where(prod => !targetUserFavoriteIds.Contains(prod.Id)).ToList();
+
+    // Shuffle the recommendations
+    var random = new Random();
+    recommendations = recommendations.OrderBy(x => random.Next()).ToList();
+
+    // Take only the maximum number of recommendations
+    recommendations = recommendations.Take(maxRecommendations).ToList();
+
+    Console.WriteLine("Final recommendations:");
+    foreach(var rec in recommendations)
+    {
+        Console.WriteLine($"\tProduct ID: {rec.Id}, Name: {rec.Name}");
+    }
+
+    return recommendations;
+}
+
+
+
+
+
+
     }
 
 }

@@ -17,7 +17,7 @@ namespace webapi.BLL.Repos.Implementations
         public async Task<User> GetRegisteredUser(string email)
         {
             return await _context.Users.AsNoTracking()
-                .Include(u => u.Role)
+                .Include(u => u.Role).Include(u => u.Favourites)
                 .FirstOrDefaultAsync(u => u.Email == email && u.Role.Name != "UnregisteredUser");
         }
 

@@ -7,6 +7,8 @@ namespace webapi.BLL.Repos.Interfaces
         Task<IEnumerable<Product>> GetSpecialOfferProductsAsync();
         Task<Product> GetProductDetailsByIdAsync(int id);
         Task<IEnumerable<Product>> SearchProductsByNameAsync(string name);
+
+        Task<IEnumerable<Product>> GetProductsBySubcategoryAsync(string subcategory);
     }
 
 }

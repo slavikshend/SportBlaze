@@ -97,5 +97,16 @@ namespace webapi.BLL.Repos.Implementations
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Product>> GetProductsBySubcategoryAsync(string subcategory)
+        {
+            return await _context.Products
+                .Include(p => p.SubCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.Features)
+                .Where(p => p.SubCategory.Name == subcategory)
+                .ToListAsync();
+        }
+
+
     }
 }

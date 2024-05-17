@@ -8,5 +8,6 @@ namespace webapi.BLL.Services.Interfaces
         Task<ProductDetailsModel> GetProductDetailsByIdAsync(int id);
         Task<IEnumerable<SimplifiedProductModel>> SearchProductsByNameAsync(string name);
         Task<IEnumerable<ProductModel>> GetPersonalizedRecommendationsAsync(string userEmail);
+        Task<IEnumerable<SimplifiedProductModel>> GetProductsBySubcategoryAsync(string subcategory);
     }
 }

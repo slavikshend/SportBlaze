@@ -20,6 +20,8 @@ export class BodyComponent {
 
   specialOfferProducts: any[] = [];
   showCart: boolean = false;
+  recommendedProducts: any[] = [];
+
 
   constructor(
     private searchService: SearchService,
@@ -36,6 +38,7 @@ export class BodyComponent {
     const token = localStorage.getItem('token');
     if (token) {
       this.loadSpecialOfferProducts();
+this.loadRecommendedProducts();
     } else {
       this.loadSpecialOfferProductsAnon();
     }
@@ -53,8 +56,14 @@ export class BodyComponent {
     });
   }
 
+  loadRecommendedProducts(): void {
+    this.productService.getPersonalizedRecommendations().subscribe((products: any[]) => {
+      this.recommendedProducts = products;
+    });
+  }
+
   loadProductsBySubcategory(subcategory: string): void {
-    this.productService.getProductsBySubcategory(subcategory).subscribe((products: any[]) => {
+    this.productService.loadProductsBySubcategory(subcategory).subscribe((products: any[]) => {
       this.specialOfferProducts = products;
     });
   }
@@ -70,7 +79,7 @@ export class BodyComponent {
     }
   }
 
-    loadSpecialOfferProducts() {
+  loadSpecialOfferProducts() {
     this.productService.getSpecialOfferProducts().subscribe((products: any[]) => {
       this.specialOfferProducts = products;
     });

@@ -108,5 +108,11 @@ namespace webapi.BLL.Services.Implementations
             return _mapper.Map<IEnumerable<ProductModel>>(recommendations);
         }
 
+        public async Task<IEnumerable<SimplifiedProductModel>> GetProductsBySubcategoryAsync(string subcategory)
+        {
+            var products = await _productRepo.GetProductsBySubcategoryAsync(subcategory);
+            return _mapper.Map<IEnumerable<SimplifiedProductModel>>(products);
+        }
+
     }
 }

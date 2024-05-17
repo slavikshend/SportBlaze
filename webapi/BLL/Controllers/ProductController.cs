@@ -107,7 +107,7 @@ namespace webapi.BLL.Controllers
         }
 
         [HttpGet("personalized-recommendations")]
-        public async Task<ActionResult<IEnumerable<ProductModel>>> GetPersonalizedRecommendations()
+        public async Task<ActionResult<IEnumerable<SimplifiedProductModel>>> GetPersonalizedRecommendations()
         {
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (string.IsNullOrEmpty(email))
@@ -118,6 +118,15 @@ namespace webapi.BLL.Controllers
             var recommendations = await _productService.GetPersonalizedRecommendationsAsync(email);
             return Ok(recommendations);
         }
+
+        [HttpGet("subcategory")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<SimplifiedProductModel>>> GetProductsBySubcategory(string subcategory)
+        {
+            var products = await _productService.GetProductsBySubcategoryAsync(subcategory);
+            return Ok(products);
+        }
+
     }
 
 

@@ -25,4 +25,33 @@
     </div>
   </div>
 </div>
+
+<div class="product-display" *ngIf="recommendedProducts.length > 0">
+  <div class="section-header">Рекомендовані товари</div>
+  <div class="product-grid">
+    <div class="product-card" *ngFor="let product of recommendedProducts">
+      <div class="image-container">
+        <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-image" (click)="redirectToProductPage(product.id)">
+      </div>
+      <div class="product-details">
+        <div class="product-name">{{ product.name }}</div>
+        <div class="product-price">
+          <span class="old-price" *ngIf="product.discount > 0">{{ product.price }} грн.</span>
+          <div class="discount-info" *ngIf="product.discount > 0">
+            <span class="discount-percentage">(-{{ product.discount }}%)</span>
+            <span class="discounted-price">{{ calculateDiscountedPrice(product.price, product.discount) }} грн.</span>
+          </div>
+        </div>
+        <button class="favorite-button" (click)="toggleFavourite(product)">
+          <mat-icon class="favourite-icon" *ngIf="product.isFavourite">favorite</mat-icon>
+          <mat-icon class="favourite-icon" *ngIf="!product.isFavourite">favorite_border</mat-icon>
+        </button>
+        <button class="add-to-cart-button" (click)="addToCart(product)">
+          <mat-icon>shopping_cart</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <app-cart *ngIf="showCart"></app-cart>
