@@ -6,7 +6,7 @@
           <img [src]="item.imageUrl" alt="{{ item.name }}" class="cart-item-image">
           <div class="cart-item-details">
             <div>{{ item.name }}</div>
-            <div>Quantity: {{ item.quantity }}</div>
+            <div>Кількість: {{ item.quantity }}</div>
             <div>Всього: {{ calculateDiscountedPrice(item.price, item.discount) * item.quantity }}</div>
           </div>
         </div>

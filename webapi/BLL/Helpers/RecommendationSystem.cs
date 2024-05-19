@@ -20,10 +20,6 @@ namespace webapi.BLL.Helpers
         public async Task<List<Product>> GetRecommendations(string userEmail)
         {
             var targetUser = await _userRepo.GetRegisteredUser(userEmail);
-            if (targetUser == null)
-            {
-                throw new ArgumentException("User not found");
-            }
             var similarUsers = await CalculateSimilarUsersAsync(targetUser);
             var neighborhood = SelectNeighborhood(similarUsers);
             var recommendations = GenerateRecommendations(targetUser, neighborhood, 7);
@@ -75,57 +71,22 @@ namespace webapi.BLL.Helpers
 {
     var recommendations = new List<Product>();
 
-    // Collect all products liked by users in the neighborhood
     foreach (var user in neighborhood)
     {
         if (user.Favourites != null)
         {
             var userFavorites = user.Favourites.Select(fav => fav.Product).ToList();
             recommendations.AddRange(userFavorites);
-            Console.WriteLine($"Added products liked by user {user.Email} to recommendations:");
-            foreach(var fav in userFavorites)
-            {
-                Console.WriteLine($"\tProduct ID: {fav.Id}, Name: {fav.Name}");
-            }
         }
     }
 
-    // Filter out products that the target user has already liked
     var targetUserFavoriteIds = targetUser.Favourites?.Select(fav => fav.ProductId).ToList() ?? new List<int>();
-    Console.WriteLine("Target user's liked product IDs:");
-    if (targetUserFavoriteIds != null)
-    {
-        foreach(var id in targetUserFavoriteIds)
-        {
-            Console.WriteLine($"\t{ id }");
-        }
-    }
-    else
-    {
-        Console.WriteLine("\tNo liked products found for the target user.");
-    }
     recommendations = recommendations.Where(prod => !targetUserFavoriteIds.Contains(prod.Id)).ToList();
-
-    // Shuffle the recommendations
     var random = new Random();
     recommendations = recommendations.OrderBy(x => random.Next()).ToList();
-
-    // Take only the maximum number of recommendations
     recommendations = recommendations.Take(maxRecommendations).ToList();
-
-    Console.WriteLine("Final recommendations:");
-    foreach(var rec in recommendations)
-    {
-        Console.WriteLine($"\tProduct ID: {rec.Id}, Name: {rec.Name}");
-    }
-
     return recommendations;
 }
-
-
-
-
-
 
     }
 

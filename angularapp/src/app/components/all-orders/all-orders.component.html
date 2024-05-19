@@ -17,6 +17,7 @@
             <span class="sort-indicator" [ngClass]="{'asc': sortField === 'total' && sortDirection === 'asc', 'desc': sortField === 'total' && sortDirection === 'desc'}"></span>
           </th>
           <th>Клієнт</th>
+          <th>Номер телефону</th>
           <th>Адреса доставки</th>
           <th>Метод доставки</th>
           <th>Метод оплати</th>
@@ -38,6 +39,7 @@
           <td>{{ order.orderDate | date: 'dd/MM/yyyy' }}</td>
           <td>{{ order.total }}</td>
           <td>{{ order.firstName }} {{ order.lastName }}</td>
+          <td>{{ order.phoneNumber }}</td>
           <td>{{ order.deliveryAddress }}</td>
           <td>{{ order.deliveryName }}</td>
           <td>{{ order.paymentName }}</td>
