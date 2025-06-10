@@ -106,16 +106,16 @@ jobs:
     - name: Test Docker Compose configuration
       run: |
         echo "Validating docker-compose.yml..."
-        docker-compose config
+        docker compose config
         
         echo "Testing containers startup..."
-        docker-compose up -d
+        docker compose up -d
         
         echo "Waiting for services to start..."
         sleep 30
         
         echo "Checking service health..."
-        docker-compose ps
+        docker compose ps
         
         echo "Testing WebAPI health..."
         curl -f http://localhost:7023/health || echo "API health check failed"
@@ -127,18 +127,18 @@ jobs:
       if: always()
       run: |
         echo "WebAPI logs:"
-        docker-compose logs webapi
+        docker compose logs webapi
         
         echo "Angular logs:"
-        docker-compose logs client
+        docker compose logs client
         
         echo "Database logs:"
-        docker-compose logs db
+        docker compose logs db
 
     - name: Cleanup containers
       if: always()
       run: |
-        docker-compose down -v
+        docker compose down -v
         docker system prune -f
 
     - name: Deploy to Staging
