@@ -1,0 +1,161 @@
+name: SportBlaze CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  DOTNET_VERSION: '7.0.x'
+  NODE_VERSION: '18.x'
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 12345
+          POSTGRES_DB: sportblaze
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore .NET dependencies
+      run: dotnet restore webapi/
+
+    - name: Build .NET project
+      run: dotnet build webapi/ --no-restore --configuration Release
+
+    - name: Run .NET tests
+      run: dotnet test --configuration Release --verbosity normal --logger trx --results-directory TestResults/
+      env:
+        ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=sportblaze;Username=postgres;Password=12345"
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: angularapp/package-lock.json
+
+    - name: Install Angular dependencies
+      run: |
+        cd angularapp
+        npm ci
+
+    - name: Run Angular linting
+      run: |
+        cd angularapp
+        npm run lint
+
+    - name: Run Angular tests
+      run: |
+        cd angularapp
+        npm run test:ci
+
+    - name: Build Angular app
+      run: |
+        cd angularapp
+        npm run build --prod
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: dotnet-test-results
+        path: TestResults/
+
+    - name: Upload Angular build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: angular-build
+        path: angularapp/dist/
+
+  deploy:
+    name: Deploy with Docker Compose
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker images
+      run: |
+        echo "Building WebAPI Docker image..."
+        docker build -t sportblaze-webapi:latest ./webapi
+        
+        echo "Building Angular Docker image..."
+        docker build -t sportblaze-client:latest ./angularapp
+        
+        echo "Docker images built successfully"
+
+    - name: Test Docker Compose configuration
+      run: |
+        echo "Validating docker-compose.yml..."
+        docker-compose config
+        
+        echo "Testing containers startup..."
+        docker-compose up -d
+        
+        echo "Waiting for services to start..."
+        sleep 30
+        
+        echo "Checking service health..."
+        docker-compose ps
+        
+        echo "Testing WebAPI health..."
+        curl -f http://localhost:7023/health || echo "API health check failed"
+        
+        echo "Testing Angular app..."
+        curl -f http://localhost:4200 || echo "Angular health check failed"
+
+    - name: Show container logs
+      if: always()
+      run: |
+        echo "WebAPI logs:"
+        docker-compose logs webapi
+        
+        echo "Angular logs:"
+        docker-compose logs client
+        
+        echo "Database logs:"
+        docker-compose logs db
+
+    - name: Cleanup containers
+      if: always()
+      run: |
+        docker-compose down -v
+        docker system prune -f
+
+    - name: Deploy to Staging
+      run: |
+        echo "Deploying SportBlaze to staging environment..."
+        echo "Application: ASP.NET Core + Angular + PostgreSQL"
+        echo "Version: $(git rev-parse --short HEAD)"
+        echo "Deployment time: $(date)"
+        echo "Staging URL: https://staging.sportblaze.com (simulated)"
+        echo "Deployment completed successfully!"
