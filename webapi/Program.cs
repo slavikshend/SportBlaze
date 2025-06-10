@@ -63,7 +63,7 @@ internal class Program
         builder.Services.AddScoped<RecommendationSystem>();
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy("AllowAngularApp",
+            options.AddPolicy("AllowAngular",
                 builder =>
                 {
                     builder.WithOrigins("http://localhost:4200")
@@ -93,7 +93,7 @@ internal class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        app.UseCors("AllowAngularApp");
+        app.UseCors("AllowAngular");
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
