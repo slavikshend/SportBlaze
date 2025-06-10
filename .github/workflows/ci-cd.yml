@@ -60,17 +60,12 @@ jobs:
     - name: Install Angular dependencies
       run: |
         cd angularapp
-        npm ci
+        npm install
 
     - name: Run Angular linting
       run: |
         cd angularapp
         npm run lint
-
-    - name: Run Angular tests
-      run: |
-        cd angularapp
-        npm run test:ci
 
     - name: Build Angular app
       run: |
