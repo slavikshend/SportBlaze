@@ -7,7 +7,7 @@
 <div class="center-content">
   <div mat-dialog-content style="text-align: center;">Видалити {{ item.name }}?</div>
   <div mat-dialog-actions class="dialog-actions">
-    <button mat-button class="login-button" (click)="confirm()">Так</button>
+    <button mat-button data-cy="delete-thing" class="login-button" (click)="confirm()">Так</button>
     <button mat-button class="login-button" (click)="cancel()">Ні</button>
   </div>
 </div>

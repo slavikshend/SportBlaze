@@ -1,4 +1,4 @@
-﻿module.exports = function (config) {
+module.exports = function (config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
@@ -21,6 +21,9 @@
     jasmineHtmlReporter: {
       suppressAll: true // removes the duplicated traces
     },
+    files: [
+      'src/**/*.spec.ts'
+    ],
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage/'),
       subdir: '.',

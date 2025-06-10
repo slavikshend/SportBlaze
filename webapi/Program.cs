@@ -66,7 +66,7 @@ internal class Program
             options.AddPolicy("AllowAngularApp",
                 builder =>
                 {
-                    builder.WithOrigins("https://localhost:4200")
+                    builder.WithOrigins("http://localhost:4200")
                            .AllowAnyMethod()
                            .AllowAnyHeader()
                            .AllowCredentials();
@@ -87,17 +87,17 @@ internal class Program
         });
 
         var app = builder.Build();
-        app.UseCors("AllowAngularApp");
-        app.UseAuthentication();
-        app.UseAuthorization();
 
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+        app.UseCors("AllowAngularApp");
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.MapControllers();
         app.UseHttpsRedirection();
-        app.Run();
+            app.Run();
     }
 }

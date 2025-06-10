@@ -7,12 +7,12 @@
 <div class="container" style="padding-bottom:0; margin-bottom:0;">
   <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
     <mat-form-field class="full-width">
-      <input matInput placeholder="Адреса електронної пошти" formControlName="email">
+      <input data-cy="email-cy" matInput placeholder="Адреса електронної пошти" formControlName="email">
       <mat-error *ngIf="loginForm.controls['email'].errors?.['required']">Поле не має бути порожнім</mat-error>
       <mat-error *ngIf="loginForm.controls['email'].errors?.['email']">Невалідна адреса електронної пошти</mat-error>
     </mat-form-field>
     <mat-form-field class="full-width">
-      <input matInput placeholder="Пароль" formControlName="password" type="{{ passwordHidden ? 'password' : 'text' }}" id="passwordInput">
+      <input data-cy="password-cy" matInput placeholder="Пароль" formControlName="password" type="{{ passwordHidden ? 'password' : 'text' }}" id="passwordInput">
       <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility($event)" tabindex="-1">
         <mat-icon>{{ passwordHidden ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>

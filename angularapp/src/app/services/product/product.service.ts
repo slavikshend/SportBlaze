@@ -4,13 +4,14 @@ import { Observable } from 'rxjs';
 import { Product } from '../../interfaces/product';
 import { SimplifiedProduct } from '../../interfaces/simplified-product';
 import { ProductDetails } from '../../interfaces/product-details'; // Import the product details interface
+import { config } from '../../../main';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  private apiUrl = 'https://localhost:7023/api/product';
+  private apiUrl = `${config.apiUrl}/api/product`;
 
   constructor(private http: HttpClient) { }
 

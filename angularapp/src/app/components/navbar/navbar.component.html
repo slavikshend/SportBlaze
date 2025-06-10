@@ -33,7 +33,7 @@
   </div>
 </div>
 <div *ngIf="showLoginMenu && isLoggedIn()" class="login-menu">
-  <div>{{ userFirstName }}</div>
+  <div id="divUserName">{{ userFirstName }}</div>
   <div (click)="toggleLoginMenu()" routerLink="/cabinet">Особистий кабінет</div>
   <div (click)="logout()">Вихід з акаунту</div>
 </div>

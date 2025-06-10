@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  webapi:
+    build: ./webapi
+    networks:
+      - spblz-ntw
+    ports:
+      - "7023:80"
+    container_name: spblz_api
+    depends_on:
+      - db
+
+  client:
+    build: ./angularapp
+    networks:
+      - spblz-ntw
+    ports:
+      - "4200:80"
+    container_name: spblz_client
+    depends_on:
+      - webapi
+
+  db:
+    image: postgres:16
+    container_name: spblz_db
+    networks:
+      - spblz-ntw
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: sportblaze
+    volumes:
+      - ./db/backup.sql:/docker-entrypoint-initdb.d/backup.sql
+
+networks:
+  spblz-ntw:
+    driver: bridge

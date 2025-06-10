@@ -46,7 +46,7 @@
           <mat-icon class="favourite-icon" *ngIf="product.isFavourite">favorite</mat-icon>
           <mat-icon class="favourite-icon" *ngIf="!product.isFavourite">favorite_border</mat-icon>
         </button>
-        <button class="add-to-cart-button" (click)="addToCart(product)">
+        <button [attr.data-cy]="'add-to-cart-' + product.id" class="add-to-cart-button" (click)="addToCart(product)">
           <mat-icon>shopping_cart</mat-icon>
         </button>
       </div>

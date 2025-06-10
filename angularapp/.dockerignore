@@ -1,0 +1,49 @@
+# Folders to ignore
+node_modules
+dist
+.obj
+.angular
+.vscode
+cypress
+
+# Configuration/IDE
+*.esproj
+*.esproj.user
+*.user
+*.suo
+*.sln
+*.csproj
+*.cs
+*.dll
+*.pdb
+*.exe
+*.cache
+
+# Test outputs & coverage
+coverage
+karma.conf.js
+cypress.config.js
+
+# Logs and debug
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+*.log
+
+# Environment files
+.env
+.env.*
+
+# Docker files that shouldn't go inside
+Dockerfile
+docker-compose.yml
+
+# Git & VS
+.git
+.gitattributes
+.gitignore
+
+# Misc
+README.md
+nuget.config
+aspnetcore-https.js
