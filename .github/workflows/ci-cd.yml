@@ -2,9 +2,9 @@ name: SportBlaze CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 env:
   DOTNET_VERSION: '7.0.x'
