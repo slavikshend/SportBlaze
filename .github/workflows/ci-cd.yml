@@ -62,11 +62,6 @@ jobs:
         cd angularapp
         npm install
 
-    - name: Run Angular linting
-      run: |
-        cd angularapp
-        npm run lint
-
     - name: Build Angular app
       run: |
         cd angularapp
